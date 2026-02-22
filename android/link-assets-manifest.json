@@ -1,0 +1,37 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Sarabun-ExtraBold.ttf",
+      "sha1": "ec2f451515dc5e56dcba3af842cf88a4583f8770"
+    },
+    {
+      "path": "assets/fonts/Sarabun-ExtraLight.ttf",
+      "sha1": "65bdfba1bc5c1bfe798d158dfa9d97d8aa28b826"
+    },
+    {
+      "path": "assets/fonts/Sarabun-Thin.ttf",
+      "sha1": "0cf7b61abecc53e70c6cdd97297ac9a7ad812cae"
+    },
+    {
+      "path": "assets/fonts/Sarabun-Regular.ttf",
+      "sha1": "a9b65e36ee8224b459b9dcdb8bf55ef41b4ab867"
+    },
+    {
+      "path": "assets/fonts/Sarabun-Bold.ttf",
+      "sha1": "8a5854cb1d43fe0caf68d4f82a62c3dfd4f5cb5a"
+    },
+    {
+      "path": "assets/fonts/Sarabun-SemiBold.ttf",
+      "sha1": "fa6c7f47da0dae54034d0b4eea541e48e615d2d5"
+    },
+    {
+      "path": "assets/fonts/Sarabun-Medium.ttf",
+      "sha1": "39c5f343e03df2db76283f8b07125e15ffff0b75"
+    },
+    {
+      "path": "assets/fonts/Sarabun-Light.ttf",
+      "sha1": "49e7b35305be84b3de4cf02cadd9eebc21c8f681"
+    }
+  ]
+}
