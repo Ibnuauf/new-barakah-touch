@@ -56,7 +56,7 @@ export default function PromptPayList({ route, navigation }) {
             <ScrollView>
                 <View style={{ alignItems: 'center' }}>
                     <TouchableOpacity style={menuListStyles.statementBox} onPress={() => { navigation.navigate('Deposit', { previousScreen: route.name }) }}>
-                        <Image source={require('../../../assets/transfer-money.png')} style={menuListStyles.icon} />
+                        <Image source={require('../../../assets/transaction-icon/transfer-money.png')} style={menuListStyles.icon} />
 
                         <View>
                             <Text style={menuListStyles.titleText}>ฝากเข้าบัญชีเงินฝาก</Text>
@@ -65,7 +65,7 @@ export default function PromptPayList({ route, navigation }) {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={menuListStyles.statementBox} onPress={() => { navigation.navigate('ShareDeposit', { previousScreen: route.name }) }}>
-                        <Image source={require('../../../assets/share-bag.png')} style={menuListStyles.icon} />
+                        <Image source={require('../../../assets/transaction-icon/share-bag.png')} style={menuListStyles.icon} />
 
                         <View>
                             <Text style={menuListStyles.titleText}>ฝากเข้าบัญชีหุ้น</Text>
@@ -74,13 +74,13 @@ export default function PromptPayList({ route, navigation }) {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={menuListStyles.statementBox} onPress={() => { navigation.navigate('PayOffLoan', { previousScreen: route.name }) }}>
-                        <Image source={require('../../../assets/installment.png')} style={menuListStyles.icon} />
+                        <Image source={require('../../../assets/transaction-icon/installment.png')} style={menuListStyles.icon} />
 
                         <Text style={menuListStyles.titleText}>ชำระสินเชื่อ</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={menuListStyles.statementBox} onPress={() => { navigation.navigate('FavoriteDashboard', { previousScreen: route.name }) }}>
-                        <Image source={require('../../../assets/favorite-6.png')} style={menuListStyles.icon} />
+                        <Image source={require('../../../assets/transaction-icon/favorite-icon.png')} style={menuListStyles.icon} />
 
                         <Text style={menuListStyles.titleText}>รายการโปรด</Text>
                     </TouchableOpacity>

@@ -52,7 +52,7 @@ export default function TransactionMenu({ route, navigation }) {
       <ScrollView>
         <View style={menuListStyles.listContainer}>
           <TouchableOpacity style={menuListStyles.statementBox} onPress={() => { navigation.navigate('TransferMoney', { previousScreen: route.name }) }}>
-            <Image source={require('../../assets/transfer-money.png')} style={menuListStyles.icon} />
+            <Image source={require('../../assets/transaction-icon/transfer-money.png')} style={menuListStyles.icon} />
 
             <View>
               <Text style={menuListStyles.titleText}> โอนเข้าบัญชีเงินฝาก</Text>
@@ -61,7 +61,7 @@ export default function TransactionMenu({ route, navigation }) {
           </TouchableOpacity>
 
           <TouchableOpacity style={menuListStyles.statementBox} onPress={() => { navigation.navigate('SharePayment', { previousScreen: route.name }) }}>
-            <Image source={require('../../assets/share-bag.png')} style={menuListStyles.icon} />
+            <Image source={require('../../assets/transaction-icon/share-bag.png')} style={menuListStyles.icon} />
 
             <View>
               <Text style={menuListStyles.titleText}> โอนเข้าบัญชีหุ้น</Text>
@@ -70,13 +70,13 @@ export default function TransactionMenu({ route, navigation }) {
           </TouchableOpacity>
 
           <TouchableOpacity style={menuListStyles.statementBox} onPress={() => { navigation.navigate('LoanPayment', { previousScreen: route.name }) }}>
-            <Image source={require('../../assets/installment.png')} style={menuListStyles.icon} />
+            <Image source={require('../../assets/transaction-icon/installment.png')} style={menuListStyles.icon} />
 
             <Text style={menuListStyles.titleText}> ชำระสินเชื่อ</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={menuListStyles.statementBox} onPress={() => { navigation.navigate('SendToBank', { previousScreen: route.name }) }}>
-            <Image source={require('../../assets/transfer-money-to-bank.png')} style={menuListStyles.icon} />
+            <Image source={require('../../assets/transaction-icon/transfer-bank.png')} style={menuListStyles.icon} />
 
             <View>
               <Text style={menuListStyles.titleText}> โอนเงินไปยังธนาคาร</Text>
@@ -85,7 +85,7 @@ export default function TransactionMenu({ route, navigation }) {
           </TouchableOpacity>
 
           <TouchableOpacity style={menuListStyles.statementBox} onPress={() => { navigation.navigate('FavoriteDashboard', { previousScreen: route.name }) }}>
-            <Image source={require('../../assets/favorite-6.png')} style={menuListStyles.icon} />
+            <Image source={require('../../assets/transaction-icon/favorite-icon.png')} style={menuListStyles.icon} />
 
             <Text style={menuListStyles.titleText}> รายการโปรด</Text>
           </TouchableOpacity>

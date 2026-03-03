@@ -173,7 +173,7 @@ const SlipBankCopy = ({ navigation, route }) => {
                         <ImageBackground source={require('../../assets/qr-background.png')} style={styles.slip}>
                             <View style={styles.body}>
                                 <View style={styles.logo}>
-                                    <Image style={{ width: 349 / 1.5, height: 100 / 1.5 }} source={require('../../assets/logo-slip.png')} />
+                                    <Image style={{ width: 938 / 4, height: 234 / 4 }} source={require('../../assets/logo-slip.png')} />
                                 </View>
 
                                 <View style={[styles.header, { top: 0, paddingVertical: 0, paddingBottom: 20 }]}>
@@ -184,7 +184,7 @@ const SlipBankCopy = ({ navigation, route }) => {
                                 </View>
 
                                 <View style={styles.subSection1}>
-                                    <Image style={styles.icon} source={require('../../assets/Ibnuauf-Logo-for-App.png')} />
+                                    <Image style={styles.icon} source={require('../../assets/new-logo-barakah3.png')} />
 
                                     <View>
                                         <Text style={styles.largeText} numberOfLines={1}>{SenderName}</Text>

@@ -145,7 +145,7 @@ export default function PayOffLoan({ route, navigation }) {
             if (destinationMem?.length !== 12 && favoriteShare === undefined) {
                 setShowAlert(true)
                 setAlertMessage('กรุณากรอกเลขบัญชีหุ้นให้ครบ')
-            } else if (destinationLoan?.length !== 14 && favoriteNumber === undefined) {
+            } else if (destinationLoan?.length !== 13 && favoriteNumber === undefined) {
                 setShowAlert(true)
                 setAlertMessage('กรุณากรอกเลขสัญญาให้ครบ')
             } else {
@@ -228,13 +228,13 @@ export default function PayOffLoan({ route, navigation }) {
             .then(async response => {
                 // console.log(response.data)
                 if (response.data.code === 10) {
-                    setOtherNumber(response.data.item.LCONT_SAL)
-                    setLoanId(response.data.item.LCONT_ID)
-                    setLoanOtherCode(response.data.item.CODE)
-                    setOtherDebt(response.data.item.LCONT_AMOUNT_SAL)
-                    setLoanName(response.data.item.LSUB_NAME)
-                    setName(response.data.item.NAME)
-                    setLoanDescription(response.data.item.LSUB_NAME)
+                    setOtherNumber(response.data.item[0].LCONT_SAL)
+                    setLoanId(response.data.item[0].LCONT_ID)
+                    setLoanOtherCode(response.data.item[0].CODE)
+                    setOtherDebt(response.data.item[0].LCONT_AMOUNT_SAL)
+                    setLoanName(response.data.item[0].LSUB_NAME)
+                    setName(response.data.item[0].NAME)
+                    setLoanDescription(response.data.item[0].LSUB_NAME)
                 } else {
                     setShowAlert(true)
                     setAlertMessage(response.data.message)
@@ -308,13 +308,13 @@ export default function PayOffLoan({ route, navigation }) {
                             .then(async (response) => {
                                 // console.log(response.data)
                                 if (response.data.code === 10) {
-                                    setOtherNumber(response.data.item.LCONT_SAL)
-                                    setLoanId(response.data.item.LCONT_ID)
-                                    setLoanOtherCode(response.data.item.CODE)
-                                    setOtherDebt(response.data.item.LCONT_AMOUNT_SAL)
-                                    setLoanName(response.data.item.LSUB_NAME)
-                                    setName(response.data.item.NAME)
-                                    setLoanDescription(response.data.item.LSUB_NAME)
+                                    setOtherNumber(response.data.item[0].LCONT_SAL)
+                                    setLoanId(response.data.item[0].LCONT_ID)
+                                    setLoanOtherCode(response.data.item[0].CODE)
+                                    setOtherDebt(response.data.item[0].LCONT_AMOUNT_SAL)
+                                    setLoanName(response.data.item[0].LSUB_NAME)
+                                    setName(response.data.item[0].NAME)
+                                    setLoanDescription(response.data.item[0].LSUB_NAME)
                                     setIsLoading(false)
                                 } else {
                                     setShowAlert(true)
@@ -416,7 +416,7 @@ export default function PayOffLoan({ route, navigation }) {
     }, [loanType])
 
     useEffect(() => {
-        if (destinationMem.length === 12 && destinationLoan.length === 14) {
+        if (destinationMem.length === 12 && destinationLoan.length === 13) {
             const accountNumber = removeDash(destinationMem)
             const accountType = getAccountType(accountNumber)
 
@@ -570,7 +570,7 @@ export default function PayOffLoan({ route, navigation }) {
                                                             type='custom'
                                                             placeholder='เลขที่สัญญาปลายทาง'
                                                             placeholderTextColor='#999'
-                                                            options={{ mask: '*9-9999-999999' }}
+                                                            options={{ mask: '*.999999/9999' }}
                                                             value={favoriteNumber}
                                                             style={[styles.input, { marginTop: 10 }]}
                                                         />
@@ -592,7 +592,7 @@ export default function PayOffLoan({ route, navigation }) {
                                                             type='custom'
                                                             placeholder='เลขที่สัญญาปลายทาง'
                                                             placeholderTextColor='#999'
-                                                            options={{ mask: '*9-9999-999999' }}
+                                                            options={{ mask: '*.999999/9999' }}
                                                             value={destinationLoan}
                                                             onChangeText={text => setDestinationLoan(text)}
                                                             style={[styles.input, { marginTop: 10 }]}

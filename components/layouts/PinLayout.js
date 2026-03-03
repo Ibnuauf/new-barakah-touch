@@ -7,7 +7,7 @@ export default function PinLayout(props) {
             <SafeAreaView>
                 <View style={styles.container}>
                     <Image
-                        style={{ width: '55%', height: 90 }}
+                        style={{ width: '45%', height: 120 }}
                         source={require('../../assets/index.png')}
                     />
                     {props.children}

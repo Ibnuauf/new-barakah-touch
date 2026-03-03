@@ -15,7 +15,7 @@ import StatementDetail from '../../components/StatementDetail'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { statementStyles } from '../../components/Statement'
 import { addScreenshotListener } from 'react-native-detector'
-import { getAmount, prettyAmount } from '../../util'
+import { getAmount } from '../../util'
 
 export default function LoanDetail({ route, navigation }) {
     const { LCONT_ID, CODE } = route.params
@@ -25,7 +25,6 @@ export default function LoanDetail({ route, navigation }) {
     const [showAlert, setShowAlert] = useState(false)
     const [alertMessage, setAlertMessage] = useState('')
     const [id, setId] = useState(null)
-    const [chart, setChart] = useState(null)
 
     const handleBackNavigator = () => {
         navigation.reset({
@@ -53,8 +52,6 @@ export default function LoanDetail({ route, navigation }) {
                         .then(async (response) => {
                             if (response.data.code === 10) {
                                 dispatch({ type: 'SET_LOAN', LOAN: response.data.item, STATEMENTS: response.data.itemdetail.PAYDEPT })
-
-                                setChart(response.data.itemdetail.OTHER)
 
                                 try {
                                     await AsyncStorage.setItem('token', response.data.itemdetail.Token)
@@ -164,6 +161,16 @@ export default function LoanDetail({ route, navigation }) {
                     <Text style={[styles.infoText, { fontFamily: 'Sarabun-Regular' }]}>ยอดหนี้คงเหลือ</Text>
                     <Text style={styles.infoText}>{LOAN.LCONT_AMOUNT_SAL}</Text>
                 </View>
+
+                {
+                    LOAN.CHARGE_AMOUNT !== null && LOAN.CHARGE_AMOUNT !== 0 && (
+                        <View style={styles.infoBox}>
+                            <Text style={[styles.infoText, { fontFamily: 'Sarabun-Regular', color: '#ff4d4f' }]}>ค่าติดตาม</Text>
+                            <Text style={[styles.infoText, { fontFamily: 'Sarabun-Regular', color: '#ff4d4f' }]}>{LOAN.CHARGE_AMOUNT}</Text>
+                        </View>
+                    )
+                }
+
                 {
                     !LOAN.OVERDUE || getAmount(LOAN.OVERDUE) === 0 ? (
                         null
@@ -171,16 +178,6 @@ export default function LoanDetail({ route, navigation }) {
                         <View style={styles.infoBox}>
                             <Text style={[styles.infoText, { fontFamily: 'Sarabun-Regular', color: '#ff4d4f' }]}>ยอดหนี้ค้าง</Text>
                             <Text style={[styles.infoText, { fontFamily: 'Sarabun-Regular', color: '#ff4d4f' }]}>{LOAN.OVERDUE}</Text>
-                        </View>
-                    )
-                }
-                {
-                    !chart || chart === 0 ? (
-                        null
-                    ) : (
-                        <View style={styles.infoBox}>
-                            <Text style={[styles.infoText, { fontFamily: 'Sarabun-Regular', color: '#ff4d4f' }]}>ค่าติดตามและดำเนินคดี</Text>
-                            <Text style={[styles.infoText, { fontFamily: 'Sarabun-Regular', color: '#ff4d4f' }]}>{prettyAmount(chart)}</Text>
                         </View>
                     )
                 }

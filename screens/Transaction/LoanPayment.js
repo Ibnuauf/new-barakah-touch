@@ -60,6 +60,8 @@ const LoanPayment = ({ route, navigation }) => {
   const [memo, setMemo] = useState('')
   const [debt, setDebt] = useState(null)
   const [otherDebt, setOtherDebt] = useState(null)
+  const [chargeAmount, setChargeAmount] = useState(null)
+  const [otherChargeAmount, setOtherChargeAmount] = useState(null)
   const [MemID, setMemID] = useState(null)
   const [OtherLOAN_LIST, setOtherLOAN_LIST] = useState(null)
   const [index1, setIndex] = useState(0)
@@ -92,7 +94,7 @@ const LoanPayment = ({ route, navigation }) => {
       if (DestinationMem?.length !== 12 && favoriteShare === undefined && qrShare === null) {
         setShowAlert(true)
         setAlertMessage('กรุณากรอกเลขบัญชีหุ้นให้ครบ')
-      } else if (DestinationLoan?.length !== 14 && favoriteNumber === undefined && qrLoanId === null) {
+      } else if (DestinationLoan?.length !== 13 && favoriteNumber === undefined && qrLoanId === null) {
         setShowAlert(true)
         setAlertMessage('กรุณากรอกเลขสัญญาให้ครบ')
       } else {
@@ -137,9 +139,9 @@ const LoanPayment = ({ route, navigation }) => {
       }
 
       if (sourceAccount.ACC_TYPE === '03') {
-        if (amount % 5000 !== 0) {
+        if (amount % 100 !== 0) {
           setShowAlert(true)
-          setAlertMessage('กรณีบัญชีมูฏอรอบะฮ์ กรุณาระบุจำนวนเงินคราวละ 5000 บาท')
+          setAlertMessage('กรณีบัญชีมูฏอรอบะฮ์ กรุณาระบุจำนวนเงินคราวละ 100 บาท')
           return
         }
       }
@@ -195,24 +197,19 @@ const LoanPayment = ({ route, navigation }) => {
       )
       .then(async response => {
         // console.log(response.data)
-        if (await response.data.code === 10) {
+        if (response.data.code === 10) {
+          const OtherLOAN_LIST = await response.data.item[0]
+          const { LCONT_AMOUNT_SAL, LCONT_SAL, CHARGE_AMOUNT } = await response.data.item[0]
+
           if (favoriteShare !== undefined && favoriteNumber !== undefined) {
-            const otherDebt = response.data.item.LCONT_AMOUNT_SAL
-            const OtherLOAN_LIST = response.data.item
-
-            const amount = otherNumber ? otherNumber : favNumber
-
-            checkLoan(amount, favoriteNumber, otherDebt, OtherLOAN_LIST, favoriteShare)
-
+            checkLoan(otherNumber, favoriteNumber, LCONT_AMOUNT_SAL, OtherLOAN_LIST, favoriteShare)
           } else if (qrLoanCode !== undefined) {
-            const otherDebt = response.data.item.LCONT_AMOUNT_SAL
-            const OtherLOAN_LIST = response.data.item
-
-            checkLoan(otherNumber, qrLoanId, otherDebt, OtherLOAN_LIST, qrShare)
+            checkLoan(otherNumber, qrLoanId, LCONT_AMOUNT_SAL, OtherLOAN_LIST, qrShare)
           } else {
-            setOtherNumber(await response.data.item.LCONT_SAL)
-            setOtherDebt(await response.data.item.LCONT_AMOUNT_SAL)
-            setOtherLOAN_LIST(await response.data.item)
+            setOtherNumber(LCONT_SAL)
+            setOtherDebt(LCONT_AMOUNT_SAL)
+            setOtherChargeAmount(CHARGE_AMOUNT)
+            setOtherLOAN_LIST(OtherLOAN_LIST)
           }
         } else {
           setShowAlert(true)
@@ -238,7 +235,7 @@ const LoanPayment = ({ route, navigation }) => {
   }
 
   useEffect(() => {
-    if (DestinationMem.length === 12 && DestinationLoan.length === 14) {
+    if (DestinationMem.length === 12 && DestinationLoan.length === 13) {
       const accountNumber = removeDash(DestinationMem)
       const accountType = getAccountType(accountNumber)
 
@@ -375,11 +372,12 @@ const LoanPayment = ({ route, navigation }) => {
             )
             .then(async response => {
               // console.log(response.data)
-              if (await response.data !== undefined) {
+              if (response.data !== undefined) {
                 if (response.data.itemdetail.length !== 0) {
                   setLoanName(response.data.itemdetail[0].LSUB_NAME)
                   setLoanLcontID(response.data.itemdetail[0].LCONT_ID)
                   setDebt(response.data.itemdetail[0].LCONT_AMOUNT_SAL)
+                  setChargeAmount(response.data.itemdetail[0].CHARGE_AMOUNT)
                   setOwnNumber(response.data.itemdetail[0].LCONT_SAL)
                 }
 
@@ -405,18 +403,14 @@ const LoanPayment = ({ route, navigation }) => {
 
                   setTimeout(() => {
                     axios
-                      .post(
-                        `${StoreAPI_URL}/loanscan`,
-                        {
-                          LCONT_ID: qrLoanCode,
+                      .post(`${StoreAPI_URL}/loanscan`, {
+                        LCONT_ID: qrLoanCode,
+                      }, {
+                        headers: {
+                          APP_KEY: APP_KEY,
+                          Authorization: `Bearer ${token}`,
                         },
-                        {
-                          headers: {
-                            APP_KEY: APP_KEY,
-                            Authorization: `Bearer ${token}`,
-                          },
-                        },
-                      )
+                      })
                       .then(async response => {
                         const { code, item, itemdetail, message } = response.data
 
@@ -451,7 +445,6 @@ const LoanPayment = ({ route, navigation }) => {
                   console.log(err)
                 }
               }
-
             })
             .catch(err => {
               if (err.message === 'Network Error') {
@@ -647,7 +640,14 @@ const LoanPayment = ({ route, navigation }) => {
 
                                 {
                                   debt !== null && (
-                                    <Text style={styles.guideText}>หนี้คงเหลือ {debt} บาท</Text>
+                                    <Text style={styles.guideText}>
+                                      หนี้คงเหลือ {debt} บาท
+                                      {
+                                        chargeAmount !== null && chargeAmount !== 0 && (
+                                          <Text>   ค่าติดตาม {chargeAmount} บาท</Text>
+                                        )
+                                      }
+                                    </Text>
                                   )
                                 }
                               </View>
@@ -674,7 +674,7 @@ const LoanPayment = ({ route, navigation }) => {
                                 type={'custom'}
                                 placeholder='เลขที่สัญญาปลายทาง'
                                 placeholderTextColor='#999'
-                                options={{ mask: '*9-9999-999999' }}
+                                options={{ mask: '*.999999/9999' }}
                                 value={DestinationLoan}
                                 onChangeText={text => setDestinationLoan(text)}
                                 style={[styles.input, { marginTop: 10 }]}
@@ -694,7 +694,14 @@ const LoanPayment = ({ route, navigation }) => {
 
                                 {
                                   otherDebt !== null && (
-                                    <Text style={styles.guideText}>หนี้คงเหลือ {otherDebt} บาท</Text>
+                                    <Text style={styles.guideText}>
+                                      หนี้คงเหลือ {otherDebt} บาท
+                                      {
+                                        otherChargeAmount !== null && otherChargeAmount !== 0 && (
+                                          <Text>   ค่าติดตาม {otherChargeAmount} บาท</Text>
+                                        )
+                                      }
+                                    </Text>
                                   )
                                 }
                               </View>
@@ -718,7 +725,7 @@ const LoanPayment = ({ route, navigation }) => {
                                 type={'custom'}
                                 placeholder='เลขที่สัญญาปลายทาง'
                                 placeholderTextColor='#999'
-                                options={{ mask: '*9-9999-999999' }}
+                                options={{ mask: '*.999999/9999' }}
                                 value={qrLoanId}
                                 style={[styles.input, { marginTop: 10 }]}
                               />
@@ -737,7 +744,14 @@ const LoanPayment = ({ route, navigation }) => {
 
                                 {
                                   otherDebt !== null && (
-                                    <Text style={styles.guideText}>หนี้คงเหลือ {otherDebt} บาท</Text>
+                                    <Text style={styles.guideText}>
+                                      หนี้คงเหลือ {otherDebt} บาท
+                                      {
+                                        otherChargeAmount !== null && otherChargeAmount !== 0 && (
+                                          <Text>   ค่าติดตาม {otherChargeAmount} บาท</Text>
+                                        )
+                                      }
+                                    </Text>
                                   )
                                 }
                               </View>
@@ -762,7 +776,7 @@ const LoanPayment = ({ route, navigation }) => {
                               type={'custom'}
                               placeholder='เลขที่สัญญาปลายทาง'
                               placeholderTextColor='#999'
-                              options={{ mask: '*9-9999-999999' }}
+                              options={{ mask: '*.999999/9999' }}
                               value={favoriteNumber}
                               style={[styles.input, { marginTop: 10 }]}
                             />

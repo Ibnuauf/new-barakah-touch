@@ -18,6 +18,7 @@ import {
 } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
+import { scale } from 'react-native-size-matters'
 import AppAlert from '../components/AppAlert'
 import { launchImageLibrary } from 'react-native-image-picker'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -49,32 +50,32 @@ const HomeScreen = ({ route, navigation }) => {
         {
             id: 1,
             name: 'บัญชีหุ้น',
-            icon: require('../assets/icon/iconShare.png')
+            icon: require('../assets/icon/iconShare_B.png')
         },
         {
             id: 2,
             name: 'เงินฝาก',
-            icon: require('../assets/icon/iconDeposit.png')
+            icon: require('../assets/icon/iconDeposit_B.png')
         },
         {
             id: 3,
             name: 'สินเชื่อ',
-            icon: require('../assets/icon/iconCredit.png')
+            icon: require('../assets/icon/iconCredit_B.png')
         },
         {
             id: 4,
-            name: 'บัตรสมาชิก',
-            icon: require('../assets/icon/iconCard.png')
+            name: 'สวัสดิการ',
+            icon: require('../assets/icon/icon1_B.png')
         },
         {
             id: 5,
             name: 'โอน-ผ่อนชำระ',
-            icon: require('../assets/icon/iconTransfer.png')
+            icon: require('../assets/icon/iconTransfer_B.png')
         },
         {
             id: 6,
             name: 'บริการอื่นๆ',
-            icon: require('../assets/icon/iconWelfare.png')
+            icon: require('../assets/icon/iconWelfare_B.png')
         },
     ]
 
@@ -83,7 +84,7 @@ const HomeScreen = ({ route, navigation }) => {
             case 1: return navigation.navigate('ShareAccount', { previousScreen: route.name })
             case 2: return navigation.navigate('Saving', { previousScreen: route.name })
             case 3: return navigation.navigate('Loan', { previousScreen: route.name })
-            case 4: return navigation.navigate('MembershipCard', { previousScreen: route.name })
+            case 4: return navigation.navigate('Test', { previousScreen: route.name })
             case 5: return navigation.navigate('TransactionMenu', { previousScreen: route.name })
             case 6: return navigation.navigate('ServiceList', { previousScreen: route.name })
             default: return navigation.navigate('home')
@@ -212,7 +213,7 @@ const HomeScreen = ({ route, navigation }) => {
             if (shareNo !== null) {
                 setShareNo(shareNo)
 
-                if (shareNo === '001-01-99999') {
+                if (shareNo === '002-01-99999') {
                     console.log('user test')
                     await AsyncStorage.setItem('StoreAPI_URL', API_URL_TEST_DIRECT)
                 }
@@ -233,7 +234,7 @@ const HomeScreen = ({ route, navigation }) => {
     }, [route])
 
     useEffect(() => {
-        const subscription = AppState.addEventListener("change", _handleAppStateChange)
+        const subscription = AppState.addEventListener('change', _handleAppStateChange)
 
         subscription.remove()
     }, [])
@@ -265,8 +266,8 @@ const HomeScreen = ({ route, navigation }) => {
     })
 
     const _handleAppStateChange = (nextAppState) => {
-        if (appState.current.match(/inactive|background/) && nextAppState === "active") {
-            // console.log("App has come to the foreground!")
+        if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+            // console.log('App has come to the foreground!')
         }
 
         appState.current = nextAppState
@@ -315,7 +316,7 @@ const HomeScreen = ({ route, navigation }) => {
             <View style={[styles.header]}>
                 <SafeAreaView style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity style={{ marginRight: 16 }} onPress={onPress}>
-                        <FontAwesome name='bars' size={20} color='#333' />
+                        <FontAwesome name='bars' size={20} color='#fff' />
                     </TouchableOpacity>
                     <View>
                         <Text style={styles.headerText} numberOfLines={1}>{COOP_NAME}</Text>
@@ -326,7 +327,7 @@ const HomeScreen = ({ route, navigation }) => {
     }
 
     return (
-        <ImageBackground source={require('../assets/blue-wallpapers.jpg')} blurRadius={10} style={styles.image}>
+        <ImageBackground source={require('../assets/white-wallpapers.jpg')} blurRadius={10} style={styles.image}>
             <View style={styles.container}>
                 {
                     userName !== null && shareNo !== null ? (
@@ -339,16 +340,16 @@ const HomeScreen = ({ route, navigation }) => {
                                         <TouchableOpacity style={styles.avatar} onPress={() => handleChoosePhoto()}>
                                             {
                                                 photo ? (
-                                                    <Image source={{ uri: photo }} style={styles.userImage} />
+                                                    <Image source={{ uri: photo }} style={{ width: scale(70), height: scale(70), borderRadius: scale(70) / 2, marginRight: scale(-8) }} />
                                                 ) : (
-                                                    <Image source={require('../assets/avatar.png')} style={styles.avatarImage} />
+                                                    <Image source={require('../assets/avatar.png')} style={{ width: scale(75), height: scale(75), marginRight: scale(-15) }} />
                                                 )
                                             }
                                         </TouchableOpacity>
 
                                         <View style={styles.userInfo}>
                                             <Text style={styles.bannerText} numberOfLines={1}>{userName}</Text>
-                                            <Text style={[styles.primaryText, styles.accountNoText]}>{shareNo}</Text>
+                                            <Text style={styles.bannerText}>{shareNo}</Text>
                                         </View>
                                     </View>
                                 </ImageBackground>
@@ -360,7 +361,7 @@ const HomeScreen = ({ route, navigation }) => {
                                     </TouchableOpacity>
 
                                     <TouchableOpacity style={[styles.totalBox, { borderLeftWidth: 1, borderLeftColor: '#e7e7e7' }]} onPress={() => navigation.navigate('QrReceve')} >
-                                        <Ionicons name="qr-code-outline" size={26} color="#096dd9" />
+                                        <Ionicons name='qr-code-outline' size={26} color='#004068' />
                                         <Text style={styles.totalText}>QR รับเงิน</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -387,7 +388,7 @@ const HomeScreen = ({ route, navigation }) => {
                         </View>
                     ) : (
                         <View style={{ height: '92%', justifyContent: 'center', alignItems: 'center' }}>
-                            <ActivityIndicator color="#0000ff" />
+                            <ActivityIndicator color='#0000ff' />
                         </View>
                     )
                 }

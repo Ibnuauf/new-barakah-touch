@@ -198,7 +198,7 @@ const SlipCopy = ({ route, navigation }) => {
                                 </View>
 
                                 <View style={[styles.subSection1, { marginTop: 20 }]}>
-                                    <Image style={styles.icon} source={require('../../assets/Ibnuauf-Logo-for-App.png')} />
+                                    <Image style={styles.icon} source={require('../../assets/new-logo-barakah3.png')} />
 
                                     <View>
                                         <Text style={styles.primaryText} numberOfLines={1}>{sourceAccountName}</Text>
@@ -212,7 +212,7 @@ const SlipCopy = ({ route, navigation }) => {
                                 </View>
 
                                 <View style={styles.subSection1}>
-                                    <Image style={styles.icon} source={require('../../assets/Ibnuauf-Logo-for-App.png')} />
+                                    <Image style={styles.icon} source={require('../../assets/new-logo-barakah3.png')} />
 
                                     <View>
                                         <Text style={styles.primaryText} numberOfLines={1}>

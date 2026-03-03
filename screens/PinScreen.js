@@ -288,7 +288,6 @@ export default function PinScreen({ route, navigation }) {
                         }
                     })
                     .then(async (response) => {
-                        console.log(response.data);
                         const shareNo = (response.data.item) !== null ? (response.data.item).slice((response.data.item).length - 12, (response.data.item).length) : ''
                         //  กรณีเข้าใช้สำเร็จ
                         if (response.data.code === 10) {

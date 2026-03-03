@@ -90,7 +90,7 @@ const QrCodeScanner = ({ navigation }) => {
                         mainAccount: mainAccount
                     })
                     return
-                } else if (accountNumber.length === 14) {
+                } else if (accountNumber.length === 13) {
                     //  qr ผ่อน
                     navigation.navigate('LoanPayment', {
                         qrLoanCode: accountNumber,

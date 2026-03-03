@@ -182,7 +182,7 @@ const FavoriteItem = ({ type, item, previousScreen }) => {
             <View style={styles.iconBox}>
                 <Image
                     style={styles.accountIcon}
-                    source={require('../../assets/Ibnuauf-Logo-for-App.png')}
+                    source={require('../../assets/new-logo-barakah3.png')}
                 />
             </View>
             <View style={styles.detailBox}>

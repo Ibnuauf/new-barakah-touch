@@ -151,7 +151,7 @@ export default function ShareAccount({ route, navigation }) {
 
                 <View style={styles.container}>
                     <View style={styles.cardContainer}>
-                        <ImageBackground source={require('../../assets/card/saving1.png')} style={styles.image}>
+                        <ImageBackground source={require('../../assets/card/saving12.png')} style={styles.image}>
                             <View style={styles.accountName}>
                                 <Text style={styles.cardBoldText} numberOfLines={1}>{SHARE.NAME}</Text>
                             </View>
@@ -274,7 +274,7 @@ const styles = ScaledSheet.create({
     },
     accountName: {
         paddingVertical: 10,
-        borderBottomColor: '#187bcd',
+        borderBottomColor: '#ffa39e',
         borderBottomWidth: '2@s',
         marginBottom: '8@s'
     },

@@ -87,9 +87,9 @@ export default function Deposit({ route, navigation }) {
                         return
                     }
 
-                    if (ACC_TYPE === '03' && amount % 5000 !== 0) {
+                    if (ACC_TYPE === '03' && amount % 100 !== 0) {
                         setShowAlert(true)
-                        setAlertMessage('กรณีบัญชีมูฏอรอบะฮ์ กรุณาระบุจำนวนเงินคราวละ 5000 บาท')
+                        setAlertMessage('กรณีบัญชีมูฏอรอบะฮ์ กรุณาระบุจำนวนเงินคราวละ 100 บาท')
                     } else {
                         navigation.navigate('QrCodeGenerate', {
                             ref1: shareNumber,
@@ -125,9 +125,9 @@ export default function Deposit({ route, navigation }) {
                             return
                         }
 
-                        if (favoriteAccountType === '03' && amount % 5000 !== 0) {
+                        if (favoriteAccountType === '03' && amount % 100 !== 0) {
                             setShowAlert(true)
-                            setAlertMessage('กรณีบัญชีมูฏอรอบะฮ์ กรุณาระบุจำนวนเงินคราวละ 5000 บาท')
+                            setAlertMessage('กรณีบัญชีมูฏอรอบะฮ์ กรุณาระบุจำนวนเงินคราวละ 100 บาท')
                         } else {
                             navigation.navigate('QrCodeGenerate', {
                                 ref1: shareNumber,
@@ -148,9 +148,9 @@ export default function Deposit({ route, navigation }) {
                     let amount = getAmount(number)
 
                     if (isInteger(amount)) {
-                        if (ACC_TYPE === '03' && amount % 5000 !== 0) {
+                        if (ACC_TYPE === '03' && amount % 100 !== 0) {
                             setShowAlert(true)
-                            setAlertMessage('กรณีบัญชีมูฏอรอบะฮ์ กรุณาระบุจำนวนเงินคราวละ 5000 บาท')
+                            setAlertMessage('กรณีบัญชีมูฏอรอบะฮ์ กรุณาระบุจำนวนเงินคราวละ 100 บาท')
                         } else {
                             navigation.navigate('QrCodeGenerate', {
                                 ref1: shareNumber,
@@ -205,43 +205,52 @@ export default function Deposit({ route, navigation }) {
     }
 
     const checkAccountNumber = (accountNo) => {
-        axios
-            .post(`${API_URL}/CheckAccountNO`, {
-                API_KEY: apiKey,
-                ACCOUNT_NO: accountNo
-            }, {
-                headers: {
-                    APP_KEY: APP_KEY,
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            .then(async (response) => {
-                // console.log(response.data)
-                if (response.data.code === 10) {
-                    setDestinationAccountName(response.data.item.ACCOUNT_NAME)
-                    setAccountName(response.data.item.ACCOUNT_NAME)
-                    setAccountNumber(response.data.item.ACCOUNT_NO)
-                    setAccountDescription(response.data.item.ACC_DESC)
-                    setACC_TYPE(response.data.item.ACC_TYPE)
-                } else {
-                    setShowAlert(true)
-                    setAlertMessage(response.data.message)
-                    setDestinationAccount('')
-                    setDestinationAccountName('')
-                }
-            })
-            .catch(err => {
-                console.log(err.message)
-                if (err.message === 'Network Error') {
-                    setShowAlert(true)
-                    setAlertType('Authen')
-                    setAlertMessage('กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง')
-                } else if (err.message === 'Request failed with status code 401') {
-                    setShowAlert(true)
-                    setAlertType('Authen')
-                    setAlertMessage('คุณไม่ได้ทำรายการในเวลาที่กำหนด กรุณา Login อีกครั้ง')
-                }
-            })
+        if (getAccountType(accountNo) === '06' || getAccountType(accountNo) === '07') {
+            setShowAlert(true)
+            setAlertMessage(' ไม่สามารถฝากเงินเข้าบัญชีอิสติกอมะฮ์ หรือบัญชีมูฎอรอบะฮฺ พิเศษได้')
+            setDestinationAccount('')
+            setDestinationAccountName('')
+        } else {
+            axios
+                .post(`${API_URL}/CheckAccountNO`, {
+                    API_KEY: apiKey,
+                    ACCOUNT_NO: accountNo
+                }, {
+                    headers: {
+                        APP_KEY: APP_KEY,
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                .then(async (response) => {
+                    // console.log(response.data)
+                    if (response.data.code === 10) {
+                        const { ACCOUNT_NAME, ACCOUNT_NO, ACC_DESC, ACC_TYPE } = response.data.item[0]
+
+                        setDestinationAccountName(ACCOUNT_NAME)
+                        setAccountName(ACCOUNT_NAME)
+                        setAccountNumber(ACCOUNT_NO)
+                        setAccountDescription(ACC_DESC)
+                        setACC_TYPE(ACC_TYPE)
+                    } else {
+                        setShowAlert(true)
+                        setAlertMessage(response.data.message ? response.data.message : 'เลขบัญชีไม่ถูกต้อง')
+                        setDestinationAccount('')
+                        setDestinationAccountName('')
+                    }
+                })
+                .catch(err => {
+                    console.log(err.message)
+                    if (err.message === 'Network Error') {
+                        setShowAlert(true)
+                        setAlertType('Authen')
+                        setAlertMessage('กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง')
+                    } else if (err.message === 'Request failed with status code 401') {
+                        setShowAlert(true)
+                        setAlertType('Authen')
+                        setAlertMessage('คุณไม่ได้ทำรายการในเวลาที่กำหนด กรุณา Login อีกครั้ง')
+                    }
+                })
+        }
     }
 
     useEffect(() => {
@@ -276,14 +285,16 @@ export default function Deposit({ route, navigation }) {
                             .then(async (response) => {
                                 // console.log(response.data)
                                 if (response.data.code === 10) {
-                                    setDestinationAccountName(response.data.item.ACCOUNT_NAME)
-                                    setAccountName(response.data.item.ACCOUNT_NAME)
-                                    setAccountNumber(response.data.item.ACCOUNT_NO)
-                                    setAccountDescription(response.data.item.ACC_DESC)
-                                    setACC_TYPE(response.data.item.ACC_TYPE)
+                                    const { ACCOUNT_NAME, ACCOUNT_NO, ACC_DESC, ACC_TYPE } = response.data.item[0]
+
+                                    setDestinationAccountName(ACCOUNT_NAME)
+                                    setAccountName(ACCOUNT_NAME)
+                                    setAccountNumber(ACCOUNT_NO)
+                                    setAccountDescription(ACC_DESC)
+                                    setACC_TYPE(ACC_TYPE)
                                 } else {
                                     setShowAlert(true)
-                                    setAlertMessage(response.data.message)
+                                    setAlertMessage(response.data.message ? response.data.message : 'เลขบัญชีไม่ถูกต้อง')
                                     setDestinationAccount('')
                                     setDestinationAccountName('')
                                 }
@@ -318,13 +329,19 @@ export default function Deposit({ route, navigation }) {
                                     if ((response.data.item)?.length <= 0) {
                                         setIsSavingEmpty(true)
                                     } else {
-                                        setOwnAccount(response.data.item[0].ACCOUNT_NO)
-                                        setAccountName(response.data.item[0].ACCOUNT_NAME)
-                                        setAccountDescription(response.data.item[0].ACC_DESC)
-                                        setAccountNumber(response.data.item[0].ACCOUNT_SHOW)
+                                        const { ACCOUNT_NO, ACCOUNT_NAME, ACC_DESC, ACCOUNT_SHOW } = response.data.item[0]
+
+                                        setOwnAccount(ACCOUNT_NO)
+                                        setAccountName(ACCOUNT_NAME)
+                                        setAccountDescription(ACC_DESC)
+                                        setAccountNumber(ACCOUNT_SHOW)
                                     }
 
-                                    dispatch({ type: 'SET_SAVING_LIST', SAVING_LIST: response.data.item })
+                                    const accounts = response.data.item.filter(
+                                        item => item.ACC_TYPE !== '06' && item.ACC_TYPE !== '07'
+                                    )
+
+                                    dispatch({ type: 'SET_SAVING_LIST', SAVING_LIST: accounts })
                                     setIsLoading(false)
 
                                     try {
@@ -490,7 +507,7 @@ export default function Deposit({ route, navigation }) {
 
                                             {
                                                 ACC_TYPE === '03' && (
-                                                    <Text style={styles.guideText}>ตัวอย่าง: 5000 10000 15000 20000</Text>
+                                                    <Text style={styles.guideText}>ตัวอย่าง: 100, 700, 1000, 5200</Text>
                                                 )
                                             }
                                         </View>
@@ -550,7 +567,7 @@ export default function Deposit({ route, navigation }) {
 
                                             {
                                                 ACC_TYPE === '03' && (
-                                                    <Text style={styles.guideText}>ตัวอย่าง: 5000 10000 15000 20000</Text>
+                                                    <Text style={styles.guideText}>ตัวอย่าง: 100, 700, 1000, 5200</Text>
                                                 )
                                             }
                                         </View>

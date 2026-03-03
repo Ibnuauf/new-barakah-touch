@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, StatusBar, TouchableOpacity, ScrollView, Platform } from 'react-native'
+import { Text, View, StatusBar, TouchableOpacity, ScrollView, Platform, SafeAreaView } from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { styles } from './AccountSetting'
@@ -172,12 +172,14 @@ const CreateMainAccount = ({ navigation, route }) => {
             <StatusBar barStyle='light-content' />
 
             <View style={styles.header}>
-                <TouchableOpacity style={{ paddingRight: 16 }} onPress={handleBackNavigator}>
-                    <FontAwesome5 name='chevron-left' size={18} color='#fff' />
-                </TouchableOpacity>
-                <View>
-                    <Text style={styles.headerText} numberOfLines={1}>จัดการบัญชี</Text>
-                </View>
+                <SafeAreaView style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <TouchableOpacity style={{ paddingRight: 16 }} onPress={handleBackNavigator}>
+                        <FontAwesome5 name='chevron-left' size={18} color='#fff' />
+                    </TouchableOpacity>
+                    <View>
+                        <Text style={styles.headerText} numberOfLines={1}>จัดการบัญชี</Text>
+                    </View>
+                </SafeAreaView>
             </View>
 
             <View style={styles.labelBox}>

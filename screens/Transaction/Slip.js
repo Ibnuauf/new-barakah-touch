@@ -329,7 +329,7 @@ const Slip = ({ route, navigation }) => {
                                     </View>
 
                                     <View style={[styles.subSection1, { marginTop: 20 }]}>
-                                        <Image style={styles.icon} source={require('../../assets/Ibnuauf-Logo-for-App.png')} />
+                                        <Image style={styles.icon} source={require('../../assets/new-logo-barakah3.png')} />
 
                                         <View>
                                             <Text style={styles.largeText} numberOfLines={1}>{sourceAccount.ACCOUNT_NAME}</Text>
@@ -343,7 +343,7 @@ const Slip = ({ route, navigation }) => {
                                     </View>
 
                                     <View style={styles.subSection1}>
-                                        <Image style={styles.icon} source={require('../../assets/Ibnuauf-Logo-for-App.png')} />
+                                        <Image style={styles.icon} source={require('../../assets/new-logo-barakah3.png')} />
 
                                         <View >
                                             <Text style={styles.largeText} numberOfLines={1}>{destinationAccount.ACCOUNT_NAME || destinationAccount.NAME || other}</Text>

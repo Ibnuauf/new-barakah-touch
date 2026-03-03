@@ -3,7 +3,7 @@
 */
 
 import React, { useEffect, useState, useReducer } from 'react'
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, BackHandler, Image, SafeAreaView, Platform } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, BackHandler, SafeAreaView, Platform } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -15,7 +15,7 @@ import { addScreenshotListener } from 'react-native-detector'
 import { APP_KEY } from '../../environment'
 import AppHeader2 from '../../components/AppHeader2'
 import { savingListReducer, initialSavingListState } from '../../reducers/savingListReducer'
-import { getAccountType, prettyAmount, removeDash, getAmount } from '../../util'
+import { prettyAmount, getAmount } from '../../util'
 
 const SavingGroup = ({ savings, type }) => {
     const navigation = useNavigation()
@@ -30,16 +30,7 @@ const SavingGroup = ({ savings, type }) => {
                 savings?.length > 0 && (
                     savings.map((item, index) => (
                         <TouchableOpacity key={index} style={styles.statementBox} onPress={() => navigation.navigate('SavingStatement', { ACCOUNT_NO: item.ACCOUNT_NO })}>
-                            <Image
-                                source={
-                                    getAccountType(removeDash(item.ACCOUNT_SHOW)) === '02' ? require('../../assets/card/saving2-crop.png') :
-                                        getAccountType(removeDash(item.ACCOUNT_SHOW)) === '03' ? require('../../assets/card/saving3-crop.png') :
-                                            getAccountType(removeDash(item.ACCOUNT_SHOW)) === '05' ? require('../../assets/card/saving4-crop.png') : require('../../assets/card/saving2.png')
-                                }
-                                style={styles.img}
-                            />
-
-                            <View style={{ flex: 1, marginLeft: 10 }}>
+                            <View style={{ flex: 1, marginLeft: 10, marginRight: 4 }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Text style={styles.statementText} numberOfLines={1}>{item.ACCOUNT_SHOW}</Text>
                                     <Text style={[styles.statementText, { color: '#1890ff' }]} numberOfLines={1}>{item.BALANCE} บาท</Text>
@@ -48,8 +39,7 @@ const SavingGroup = ({ savings, type }) => {
                                 <Text style={styles.secondaryText} numberOfLines={1} ellipsizeMode='middle'>{item.ACCOUNT_NAME}</Text>
                             </View>
 
-                            <FontAwesome5 name='chevron-right' size={16} color='#ccc' />
-
+                            <FontAwesome5 name='chevron-right' size={14} color='#ccc' />
                         </TouchableOpacity>
                     ))
                 )
@@ -63,11 +53,16 @@ export default function Saving({ route, navigation }) {
 
     const [showAlert, setShowAlert] = useState(false)
     const [alertMessage, setAlertMessage] = useState('')
-    const [totalBalance, setTotalBalance] = useState(0)
+    const [showBalance, setShowBalance] = useState(false)
     const [wadiah, setWadiah] = useState([])
     const [mudarabah, setMudarabah] = useState([])
+    const [youthSaving, setYouthSaving] = useState([])
     const [hajj, setHajj] = useState([])
-    const [showBalance, setShowBalance] = useState(false)
+    const [istiqomahSaving, setIstiqomahSaving] = useState([])
+    const [mudarabahExtra, setMudarabahExtra] = useState([])
+    const [goldAccount, setGoldAccount] = useState([])
+    const [otherAccount, setOtherAccount] = useState([])
+    const [totalBalance, setTotalBalance] = useState(0)
 
     const handleBackNavigator = () => {
         navigation.reset({
@@ -104,13 +99,38 @@ export default function Saving({ route, navigation }) {
             item => item.ACC_TYPE === '03'
         )
 
+        const youth = savingsAccount.filter(
+            item => item.ACC_TYPE === '04'
+        )
+
         const hajj = savingsAccount.filter(
             item => item.ACC_TYPE === '05'
         )
 
+        const istiqomah = savingsAccount.filter(
+            item => item.ACC_TYPE === '06'
+        )
+
+        const mudarabahEx = savingsAccount.filter(
+            item => item.ACC_TYPE === '07'
+        )
+
+        const gold = savingsAccount.filter(
+            item => item.ACC_TYPE === '08'
+        )
+
+        const other = savingsAccount.filter(
+            item => item.ACC_TYPE !== '02' && item.ACC_TYPE !== '03' && item.ACC_TYPE !== '04' && item.ACC_TYPE !== '05' && item.ACC_TYPE !== '06' && item.ACC_TYPE !== '07' && item.ACC_TYPE !== '08'
+        )
+
         setWadiah(wadiah)
         setMudarabah(mudarabah)
+        setYouthSaving(youth)
         setHajj(hajj)
+        setIstiqomahSaving(istiqomah)
+        setMudarabahExtra(mudarabahEx)
+        setGoldAccount(gold)
+        setOtherAccount(other)
     }
 
     useEffect(() => {
@@ -268,13 +288,28 @@ export default function Saving({ route, navigation }) {
                             }
 
                             {
-                                wadiah?.length > 0 && <SavingGroup savings={wadiah} type={'วาดีอะฮ์'} />
+                                wadiah?.length > 0 && <SavingGroup savings={wadiah} type={'วาดีอะห์'} />
                             }
                             {
-                                mudarabah?.length > 0 && <SavingGroup savings={mudarabah} type={'มูฎอรอบะฮ์'} />
+                                mudarabah?.length > 0 && <SavingGroup savings={mudarabah} type={'มูฎอรอบะฮฺ'} />
                             }
                             {
-                                hajj?.length > 0 && <SavingGroup savings={hajj} type={'กองทุนฮัจญ์และอุมเราะฮฺ'} />
+                                youthSaving?.length > 0 && <SavingGroup savings={youthSaving} type={'ออมทรัพย์ยุวชน'} />
+                            }
+                            {
+                                hajj?.length > 0 && <SavingGroup savings={hajj} type={'กองทุนฮัจญ์'} />
+                            }
+                            {
+                                istiqomahSaving?.length > 0 && <SavingGroup savings={istiqomahSaving} type={'อิสติกอมะฮ์'} />
+                            }
+                            {
+                                mudarabahExtra?.length > 0 && <SavingGroup savings={mudarabahExtra} type={'มูฎอรอบะฮฺ พิเศษ'} />
+                            }
+                            {
+                                goldAccount?.length > 0 && <SavingGroup savings={goldAccount} type={'ออมทอง'} />
+                            }
+                            {
+                                otherAccount?.length > 0 && <SavingGroup savings={otherAccount} type={'อื่นๆ'} />
                             }
                         </ScrollView>
                     </SafeAreaView>

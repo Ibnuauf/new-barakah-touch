@@ -241,7 +241,7 @@ const CreateFavorite = ({ route, navigation }) => {
     useEffect(() => {
         if (shareNumber.length === 12) {
             if (id === 'ผ่อนชำระ') {
-                if (loanNumber.length === 14) {
+                if (loanNumber.length === 13) {
                     axios
                         .post(
                             `${API_URL}/CheckLoanID`,
@@ -399,7 +399,7 @@ const CreateFavorite = ({ route, navigation }) => {
                                         <View style={styles.inputBox}>
                                             <TextInputMask
                                                 type={'custom'}
-                                                options={{ mask: '*9-9999-999999' }}
+                                                options={{ mask: '*.999999/9999' }}
                                                 value={loanNumber}
                                                 onChangeText={text => setLoanNumber(text)}
                                                 style={styles.input}

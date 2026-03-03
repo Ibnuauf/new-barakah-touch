@@ -187,12 +187,6 @@ export const styles = ScaledSheet.create({
         letterSpacing: 0,
         textAlign: 'center'
     },
-    activityIndicator: {
-        width: '100%',
-        position: 'absolute',
-        zIndex: -1,
-        top: -100
-    },
     header: {
         padding: 16,
         backgroundColor: '#eee'

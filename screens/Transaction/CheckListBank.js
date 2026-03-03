@@ -109,8 +109,6 @@ const CheckListBank = ({ navigation, route }) => {
                 }
             })
             .then(async response => {
-                console.log(response.data)
-
                 const { code, item, message } = response.data
 
                 if (code === 10) {
@@ -332,7 +330,7 @@ const CheckListBank = ({ navigation, route }) => {
                 <View>
                     <View style={{ paddingVertical: 14 }}>
                         <View style={styles.subSection1}>
-                            <Image style={styles.icon} source={require('../../assets/Ibnuauf-Logo-for-App.png')} />
+                            <Image style={styles.icon} source={require('../../assets/new-logo-barakah3.png')} />
 
                             <View>
                                 <Text style={styles.primaryText}>{SenderName}</Text>

@@ -180,7 +180,7 @@ const QrReceve = ({ navigation }) => {
 
             const uri = await capture()
 
-            const image = CameraRoll.save(uri, { type: 'photo', album: 'Ibnuauf' })
+            const image = CameraRoll.save(uri, { type: 'photo', album: 'Barakah' })
 
             if (image) {
                 showToast()

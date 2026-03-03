@@ -1,4 +1,5 @@
 import { ScaledSheet } from 'react-native-size-matters'
+import { PRIMARY_COLOR } from '../environment'
 
 export const styles = ScaledSheet.create({
     container: {
@@ -11,7 +12,7 @@ export const styles = ScaledSheet.create({
     },
     headerText: {
         fontSize: '16@s',
-        color: '#333',
+        color: '#fff',
         fontFamily: 'Sarabun-Medium',
         paddingVertical: 3,
         lineHeight: 36,
@@ -42,26 +43,28 @@ export const styles = ScaledSheet.create({
         alignItems: 'center',
     },
     avatar: {
+        width: '100%',
+        height: '100%',
         flex: 0.4,
         alignItems: 'flex-end',
     },
     bannerText: {
-        fontFamily: 'Sarabun-Regular',
-        fontSize: '16@s',
-        color: '#333',
+        fontFamily: 'Sarabun-Medium',
+        fontSize: '15@s',
+        color: '#32b4e7',
         marginLeft: '14@s',
-        paddingVertical: 3
+        paddingVertical: 1
     },
     totalText: {
         fontFamily: 'Sarabun-Regular',
         fontSize: '14@s',
-        color: '#096dd9',
+        color: '#004068',
         marginLeft: 10
     },
     primaryText: {
         fontFamily: 'Sarabun-Regular',
         fontSize: '14@s',
-        color: '#333',
+        color: '#32b4e7',
         paddingVertical: 2,
     },
     accountNoText: {
@@ -73,12 +76,13 @@ export const styles = ScaledSheet.create({
         flex: 0.7
     },
     userInfo: {
-        flex: 0.6,
+        flex: 1.2,
+        top: 4
     },
     totalContainer: {
         flexDirection: 'row',
         flex: 0.3,
-        backgroundColor: '#fff',
+        backgroundColor: '#d7dae2',
         paddingVertical: '8@msr',
     },
     totalBox: {
@@ -98,6 +102,6 @@ export const styles = ScaledSheet.create({
     },
     header: {
         padding: 16,
-        backgroundColor: 'rgba(0,0,0,0.03)'
+        backgroundColor: PRIMARY_COLOR
     }
 })

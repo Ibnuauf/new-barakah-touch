@@ -106,11 +106,9 @@ const TransferMoney = ({ route, navigation }) => {
             setAlertMessage('จำนวนเงินในบัญชีไม่เพียงพอ กรุณาเลือกบัญชีอื่น')
           } else {
             if (sourceAccount.ACC_TYPE === '03' || destinationAccount.ACC_TYPE === '03') {
-              if (amount % 5000 !== 0) {
+              if (amount % 100 !== 0) {
                 setShowAlert(true)
-                setAlertMessage(
-                  'กรณีบัญชีมูฏอรอบะฮ์ กรุณาระบุจำนวนเงินคราวละ 5000 บาท',
-                )
+                setAlertMessage('กรณีบัญชีมูฏอรอบะฮ์ กรุณาระบุจำนวนเงินคราวละ 100 บาท')
               } else {
                 navigation.navigate('CheckList', {
                   ref1: sourceAccount.ACCOUNT_SHOW, //เลขบัญชีต้นทาง
@@ -191,9 +189,9 @@ const TransferMoney = ({ route, navigation }) => {
 
                 if (favNumber === '0.00' || favAmount === 0) {
                   if (sourceAccount.ACC_TYPE === '03' || favoriteAccountType === '03') {
-                    if (amount % 5000 !== 0) {
+                    if (amount % 100 !== 0) {
                       setShowAlert(true)
-                      setAlertMessage('กรณีบัญชีมูฏอรอบะฮ์ กรุณาระบุจำนวนเงินคราวละ 5000 บาท')
+                      setAlertMessage('กรณีบัญชีมูฏอรอบะฮ์ กรุณาระบุจำนวนเงินคราวละ 100 บาท')
                     } else {
                       checkAccountNumber(removeDash(favoriteNumber), amount)
                     }
@@ -210,9 +208,9 @@ const TransferMoney = ({ route, navigation }) => {
                 setAlertMessage('บัญชีต้นทางกับบัญชีปลายทางเป็นบัญชีเดียวกัน')
               } else {
                 if (sourceAccount.ACC_TYPE === '03' || destinationAccountOther.ACC_TYPE === '03') {
-                  if (amount % 5000 !== 0) {
+                  if (amount % 100 !== 0) {
                     setShowAlert(true)
-                    setAlertMessage('กรณีบัญชีมูฏอรอบะฮ์ กรุณาระบุจำนวนเงินคราวละ 5000 บาท')
+                    setAlertMessage('กรณีบัญชีมูฏอรอบะฮ์ กรุณาระบุจำนวนเงินคราวละ 100 บาท')
                   } else {
                     navigation.navigate('CheckList', {
                       ref1: sourceAccount.ACCOUNT_SHOW,
@@ -324,50 +322,56 @@ const TransferMoney = ({ route, navigation }) => {
   }
 
   const checkAccountNumber = (accountNumber, amount) => {
-    axios
-      .post(`${API_URL}/CheckAccountNO`, {
-        API_KEY: apiKey,
-        ACCOUNT_NO: accountNumber
-      }, {
-        headers: {
-          APP_KEY: APP_KEY,
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(async (response) => {
-        // console.log(response.data.item)
-        if (response.data.code === 10) {
-          setDestinationAccountOther(response.data.item)
-
-          if (favoriteNumber !== undefined || qrAccount !== undefined) {
-            navigation.navigate('CheckList', {
-              ref1: sourceAccount.ACCOUNT_SHOW,
-              ref2: response.data.item.ACCOUNT_NO,
-              ref3: amount,
-              sourceAccount: sourceAccount,
-              destinationAccount: response.data.item,
-              memo: memo,
-              previousScreen: 'TransferMoney'
-            })
+    if (getAccountType(accountNumber) === '06' || getAccountType(accountNumber) === '07') {
+      setShowAlert(true)
+      setAlertMessage(' ไม่สามารถโอนเงินเข้าบัญชีอิสติกอมะฮ์ หรือบัญชีมูฎอรอบะฮฺ พิเศษได้')
+      setDestinationAccountNumber('')
+    } else {
+      axios
+        .post(`${API_URL}/CheckAccountNO`, {
+          API_KEY: apiKey,
+          ACCOUNT_NO: accountNumber
+        }, {
+          headers: {
+            APP_KEY: APP_KEY,
+            Authorization: `Bearer ${token}`
           }
-        } else {
-          setShowAlert(true)
-          setAlertMessage(response.data.message)
-          setDestinationAccountNumber('')
-        }
-      })
-      .catch(err => {
-        console.log(err.message)
-        if (err.message === 'Network Error') {
-          setShowAlert(true)
-          setAlertType('Authen')
-          setAlertMessage('กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง')
-        } else if (err.message === 'Request failed with status code 401') {
-          setShowAlert(true)
-          setAlertType('Authen')
-          setAlertMessage('คุณไม่ได้ทำรายการในเวลาที่กำหนด กรุณา Login อีกครั้ง')
-        }
-      })
+        })
+        .then(async (response) => {
+          // console.log(response.data.item)
+          if (response.data.code === 10) {
+            setDestinationAccountOther(response.data.item)
+
+            if (favoriteNumber !== undefined || qrAccount !== undefined) {
+              navigation.navigate('CheckList', {
+                ref1: sourceAccount.ACCOUNT_SHOW,
+                ref2: response.data.item.ACCOUNT_NO,
+                ref3: amount,
+                sourceAccount: sourceAccount,
+                destinationAccount: response.data.item,
+                memo: memo,
+                previousScreen: 'TransferMoney'
+              })
+            }
+          } else {
+            setShowAlert(true)
+            setAlertMessage(response.data.message)
+            setDestinationAccountNumber('')
+          }
+        })
+        .catch(err => {
+          console.log(err.message)
+          if (err.message === 'Network Error') {
+            setShowAlert(true)
+            setAlertType('Authen')
+            setAlertMessage('กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง')
+          } else if (err.message === 'Request failed with status code 401') {
+            setShowAlert(true)
+            setAlertType('Authen')
+            setAlertMessage('คุณไม่ได้ทำรายการในเวลาที่กำหนด กรุณา Login อีกครั้ง')
+          }
+        })
+    }
   }
 
   useEffect(() => {

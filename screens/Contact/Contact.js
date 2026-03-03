@@ -52,7 +52,7 @@ export default function Contact({ navigation }) {
             <View style={{ justifyContent: 'center', height: '80%' }}>
                 <Image
                     style={styles.image}
-                    source={require('../../assets/Ibnuauf-Logo-for-App.png')}
+                    source={require('../../assets/new-logo-barakah3.png')}
                 />
 
                 <View style={{ alignItems: 'center' }}>

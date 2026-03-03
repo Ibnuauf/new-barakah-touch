@@ -3,7 +3,7 @@
 */
 
 import React, { useState, useEffect } from 'react'
-import { View, Text, BackHandler, TouchableOpacity, Image, Linking, ScrollView, Platform } from 'react-native'
+import { View, Text, BackHandler, Linking, ScrollView, Platform } from 'react-native'
 import { menuListStyles } from '../../styles/menuList'
 import AppHeader2 from '../../components/AppHeader2'
 import AppAlert from '../../components/AppAlert'
@@ -12,6 +12,7 @@ import axios from 'axios'
 import NetInfo from '@react-native-community/netinfo'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { addScreenshotListener } from 'react-native-detector'
+import MenuItem from '../../components/MenuItem'
 
 export default function ServiceList({ navigation }) {
     const [API_URL, setAPI_URL] = useState(null)
@@ -30,8 +31,6 @@ export default function ServiceList({ navigation }) {
         setAlertTitle('')
 
         if (alertType === 'Authen') {
-            setAlertType('normal')
-
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'PinInput' }]
@@ -47,26 +46,28 @@ export default function ServiceList({ navigation }) {
     }
 
     const lineNotify = () => {
-        if (idCardNumber !== '') {
+        setShowAlert(true)
+
+        if (idCard) {
             axios
                 .post(`${API_URL}/linetoken`, {
                     MEM_ID: shareNumber,
                     BR_NO: brNo,
-                    ID_CARD: idCardNumber,
+                    ID_CARD: idCardNumber
                 }, {
                     headers: {
-                        APP_KEY: APP_KEY,
+                        APP_KEY: APP_KEY
                     }
                 })
                 .then(async (response) => {
-                    if (response.data.code === 10) {
-                        Linking.openURL(response.data.itemdetail).catch(err => console.error('An error occured', err))
-                    } else if (response.data.code === 20) {
-                        Linking.openURL(response.data.itemdetail).catch(err => console.error('An error occured', err))
+                    const { code, itemdetail, message } = await response.data
+
+                    if (code === 10 || code === 20) {
+                        setShowAlert(false)
+                        Linking.openURL(itemdetail).catch(err => console.log(err))
                     } else {
-                        setShowAlert(true)
                         setAlertTitle(' ไม่สำเร็จ')
-                        setAlertMessage(response.data.message)
+                        setAlertMessage(message)
                     }
                 })
                 .catch(err => {
@@ -197,43 +198,28 @@ export default function ServiceList({ navigation }) {
 
             <ScrollView>
                 <View style={menuListStyles.listContainer}>
-                    <TouchableOpacity style={menuListStyles.statementBox} onPress={() => { navigation.navigate('PromptPayList') }}>
-                        <Image
-                            style={menuListStyles.icon}
-                            source={require('../../assets/prompt-pay.png')}
-                        />
+                    <MenuItem
+                        title='พร้อมเพย์ (QR Code)'
+                        description='รองรับ Mobile Banking ทุกธนาคาร'
+                        image={require('../../assets/prompt-pay.png')}
+                        onPress={() => navigation.navigate('PromptPayList')}
+                    />
 
-                        <View>
-                            <Text style={menuListStyles.titleText} numberOfLines={1}>พร้อมเพย์ (QR Code)</Text>
-                            <Text style={menuListStyles.secondaryText} numberOfLines={1}>รองรับ Mobile Banking ทุกธนาคาร</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={menuListStyles.statementBox} onPress={lineNotify}>
-                        <Image
-                            style={menuListStyles.icon}
-                            source={require('../../assets/line-1.png')}
-                        />
-
-                        <View>
-                            <Text style={menuListStyles.titleText}>เปิดบริการ LINE แจ้งเตือน</Text>
-                            <Text style={menuListStyles.secondaryText}>รับข้อความแจ้งเตือนเงินเข้า เงินออก</Text>
-                        </View>
-                    </TouchableOpacity>
+                    <MenuItem
+                        title='เปิดบริการ LINE แจ้งเตือน'
+                        description='รับข้อความแจ้งเตือนผ่าน LINE'
+                        image={require('../../assets/line-1.png')}
+                        onPress={() => lineNotify()}
+                    />
 
                     {
                         skipStatus === 'Y' ? (
-                            <TouchableOpacity style={menuListStyles.statementBox} onPress={() => { navigation.navigate('ConfirmStatus') }}>
-                                <Image
-                                    style={menuListStyles.icon}
-                                    source={require('../../assets/confirm2.png')}
-                                />
-
-                                <View>
-                                    <Text style={menuListStyles.titleText}>ยืนยันยอดออนไลน์</Text>
-                                    <Text style={menuListStyles.secondaryText}>ยืนยันยอดหุ้น เงินฝาก และสินเชื่อ</Text>
-                                </View>
-                            </TouchableOpacity>
+                            <MenuItem
+                                title='ยืนยันยอดออนไลน์'
+                                description='ยืนยันยอดหุ้น เงินฝาก และสินเชื่อ'
+                                image={require('../../assets/confirm2.png')}
+                                onPress={() => navigation.navigate('ConfirmStatus')}
+                            />
                         ) : null
                     }
                 </View>

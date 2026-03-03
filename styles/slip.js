@@ -7,7 +7,7 @@ export const styles = ScaledSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
         width: '100%',
-        paddingHorizontal: '10@s'
+        paddingHorizontal: '20@s'
     },
     header: {
         paddingVertical: '20@vs',
@@ -177,14 +177,6 @@ export const styles = ScaledSheet.create({
         color: PRIMARY_COLOR,
         marginTop: '6@vs',
         textAlign: 'center',
-    },
-    toastContainer: {
-        backgroundColor: '#42ba96',
-        flexDirection: 'row',
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderRadius: 20,
-        alignItems: 'center'
     },
     amountContainer: {
         paddingVertical: 15, 

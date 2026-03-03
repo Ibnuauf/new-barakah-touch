@@ -46,56 +46,75 @@ const CheckListBankOtp = ({ navigation, route }) => {
 
     const onSubmit = () => {
         setShowAlert(true)
-        axios
-            .post(`${API_URL}/CIMB_Comfirm`, {
-                API_KEY: apiKey,
-                mgate_prev_inquiry_request: mgate_prev_inquiry_request
-            }, {
-                headers: {
-                    APP_KEY: APP_KEY,
-                    Authorization: `Bearer ${token}`,
-                }
-            })
-            .then(async response => {
-                // console.log(response.data)
 
-                const { code, item, message } = response.data
+        navigation.reset({
+            index: 0,
+            routes: [{
+                name: 'TransferOtp',
+                params: {
+                    PromptPayAccountNo,
+                    PromptPayAccountName,
+                    ToBankId,
+                    SenderName,
+                    SenderReference,
+                    Amount,
+                    memo,
+                    randomRef: 'kso125',
+                    mgate_prev_inquiry_request
+                }
+            }]
+        })
 
-                if (code === 10) {
-                    navigation.reset({
-                        index: 0,
-                        routes: [{
-                            name: 'TransferOtp',
-                            params: {
-                                PromptPayAccountNo,
-                                PromptPayAccountName,
-                                ToBankId,
-                                SenderName,
-                                SenderReference,
-                                Amount,
-                                memo,
-                                randomRef: item,
-                                mgate_prev_inquiry_request
-                            }
-                        }]
-                    })
-                } else {
-                    setShowAlert(true)
-                    setAlertMessage(message)
-                }
-            })
-            .catch(err => {
-                console.log({ err })
-                if (err.message === 'Network Error') {
-                    setShowAlert(true)
-                    setAlertType('Authen')
-                    setAlertMessage('ไม่สามารถทำรายการได้ กรุณาลองใหม่อีกครั้ง')
-                } else if (err.message === 'Request failed with status code 401') {
-                    setShowAlert(true)
-                    setAlertType('Authen')
-                    setAlertMessage('คุณไม่ได้ทำรายการในเวลาที่กำหนด กรุณา Login อีกครั้ง')
-                }
-            })
+        // axios
+        //     .post(`${API_URL}/CIMB_Comfirm`, {
+        //         API_KEY: apiKey,
+        //         mgate_prev_inquiry_request: mgate_prev_inquiry_request
+        //     }, {
+        //         headers: {
+        //             APP_KEY: APP_KEY,
+        //             Authorization: `Bearer ${token}`,
+        //         }
+        //     })
+        //     .then(async response => {
+        //         // console.log(response.data)
+
+        //         const { code, item, message } = response.data
+
+        //         if (code === 10) {
+        //             navigation.reset({
+        //                 index: 0,
+        //                 routes: [{
+        //                     name: 'TransferOtp',
+        //                     params: {
+        //                         PromptPayAccountNo,
+        //                         PromptPayAccountName,
+        //                         ToBankId,
+        //                         SenderName,
+        //                         SenderReference,
+        //                         Amount,
+        //                         memo,
+        //                         randomRef: item,
+        //                         mgate_prev_inquiry_request
+        //                     }
+        //                 }]
+        //             })
+        //         } else {
+        //             setShowAlert(true)
+        //             setAlertMessage(message)
+        //         }
+        //     })
+        //     .catch(err => {
+        //         console.log({ err })
+        //         if (err.message === 'Network Error') {
+        //             setShowAlert(true)
+        //             setAlertType('Authen')
+        //             setAlertMessage('ไม่สามารถทำรายการได้ กรุณาลองใหม่อีกครั้ง')
+        //         } else if (err.message === 'Request failed with status code 401') {
+        //             setShowAlert(true)
+        //             setAlertType('Authen')
+        //             setAlertMessage('คุณไม่ได้ทำรายการในเวลาที่กำหนด กรุณา Login อีกครั้ง')
+        //         }
+        //     })
     }
 
     const handleBackNavigator = () => {
@@ -188,7 +207,7 @@ const CheckListBankOtp = ({ navigation, route }) => {
                 <ScrollView>
                     <View style={{ paddingVertical: 14 }}>
                         <View style={styles.subSection1}>
-                            <Image style={styles.icon} source={require('../../assets/Ibnuauf-Logo-for-App.png')} />
+                            <Image style={styles.icon} source={require('../../assets/new-logo-barakah3.png')} />
 
                             <View>
                                 <Text style={styles.primaryText}>{SenderName}</Text>

@@ -61,7 +61,7 @@ export default function Drawer({ visible, onClose, onExit }) {
                     <View>
                         <SafeAreaView>
                             <View style={styles.header}>
-                                <Image style={styles.image} source={require('../assets/Ibnuauf-Logo-for-App.png')} />
+                                <Image style={styles.image} source={require('../assets/new-logo-barakah3.png')} />
                                 <Text style={styles.title}>เวอร์ชั่น {APP_VERSION}</Text>
                             </View>
                         </SafeAreaView>

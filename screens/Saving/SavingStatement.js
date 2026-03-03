@@ -82,16 +82,6 @@ export default function SavingStatement({ route, navigation }) {
         setModalVisible(false)
     }
 
-    const cover = (ACC_TYPE) => {
-        switch (ACC_TYPE) {
-            case '01': return require('../../assets/card/saving1.png')
-            case '02': return require('../../assets/card/saving2.png')
-            case '03': return require('../../assets/card/saving3.png')
-            case '05': return require('../../assets/card/saving4.png')
-            default: return require('../../assets/card/saving1.png')
-        }
-    }
-
     useEffect(() => {
         const getToken = async () => {
             const d = new Date()
@@ -220,23 +210,23 @@ export default function SavingStatement({ route, navigation }) {
 
             <View style={styles.container}>
                 <View style={styles.cardContainer}>
-                    <ImageBackground source={cover(SAVING.ACC_TYPE)} style={[styles.image, SAVING.ACC_TYPE === '03' && { opacity: 0.7 }]}>
-                        <ScrollView horizontal={true} style={[styles.accountName, SAVING.ACC_TYPE === '03' ? { borderBottomColor: '#ffc53d' } : {}]}>
+                    <ImageBackground source={require('../../assets/card/saving24.png')} style={styles.image}>
+                        <ScrollView horizontal={true} style={styles.accountName}>
                             <View style={{ justifyContent: 'center' }}>
-                                <Text style={[styles.cardBoldText, SAVING.ACC_TYPE === '03' ? { color: '#874d00' } : {}]} numberOfLines={1}>{SAVING.ACCOUNT_NAME}</Text>
+                                <Text style={[styles.cardBoldText, { fontSize: scale(16) }]} numberOfLines={1}>{SAVING.ACCOUNT_NAME}</Text>
                             </View>
                         </ScrollView>
                         <View style={styles.accountNumber}>
-                            <Text style={[styles.cardText, SAVING.ACC_TYPE === '03' ? { color: '#874d00' } : {}]}>{SAVING.ACCOUNT_NO}</Text>
-                            <Text style={[styles.cardText, SAVING.ACC_TYPE === '03' ? { color: '#874d00' } : {}]}>{SAVING.ACC_DESC}</Text>
+                            <Text style={styles.cardText}>{SAVING.ACCOUNT_NO}</Text>
+                            <Text style={styles.cardText}>{SAVING.ACC_DESC}</Text>
                         </View>
                         <View style={styles.balance}>
-                            <Text style={[styles.cardText, SAVING.ACC_TYPE === '03' ? { color: '#874d00' } : {}]}>ยอดเงินคงเหลือ (บาท)</Text>
-                            <Text style={[styles.cardBoldText, SAVING.ACC_TYPE === '03' ? { color: '#874d00' } : {}]}>{SAVING.BALANCE}</Text>
+                            <Text style={styles.cardText}>ยอดเงินคงเหลือ (บาท)</Text>
+                            <Text style={[styles.cardBoldText]}>{SAVING.BALANCE}</Text>
                         </View>
                         <View style={styles.balance}>
-                            <Text style={[styles.cardText, SAVING.ACC_TYPE === '03' ? { color: '#874d00' } : {}]}>ยอดเงินที่ใช้ได้ (บาท)</Text>
-                            <Text style={[styles.cardBoldText, { fontSize: scale(18) }, SAVING.ACC_TYPE === '03' ? { color: '#874d00' } : {}]}>{SAVING.AVAILABLE}</Text>
+                            <Text style={styles.cardText}>ยอดเงินที่ใช้ได้ (บาท)</Text>
+                            <Text style={[styles.cardBoldText, { fontSize: scale(18) }]}>{SAVING.AVAILABLE}</Text>
                         </View>
                     </ImageBackground>
                 </View>
@@ -246,7 +236,7 @@ export default function SavingStatement({ route, navigation }) {
                 <Text style={styles.labelText}>วันที่ทำรายการ</Text>
                 <TouchableOpacity style={styles.monthButton} onPress={() => setModalVisible(true)}>
                     <Text style={styles.monthText}>{month}</Text>
-                    <FontAwesome5 name='chevron-down' style={{ marginLeft: 6 }} size={16} color='#1677ff' />
+                    <FontAwesome5 name='chevron-down' style={{ marginLeft: 6 }} size={14} color='#1677ff' />
                 </TouchableOpacity>
             </View>
 
@@ -336,7 +326,7 @@ const styles = ScaledSheet.create({
     accountName: {
         flexDirection: 'row',
         flex: 1,
-        borderBottomColor: '#7FDBFF',
+        borderBottomColor: '#91caff',
         borderBottomWidth: 2,
         marginBottom: '10@s',
     },
@@ -350,7 +340,7 @@ const styles = ScaledSheet.create({
         fontFamily: 'Sarabun-Medium',
         fontSize: '14@s',
         color: '#fff',
-        paddingVertical: '1.5@vs',
+        paddingVertical: '1@vs',
     },
     modalHeaderContent: {
         alignSelf: 'flex-start',

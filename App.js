@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { View, Text, ImageBackground, Platform, Linking, BackHandler } from 'react-native'
+import { View, Text, Image, Platform, Linking, BackHandler } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import axios from 'axios'
@@ -27,7 +27,6 @@ import Saving from './screens/Saving/Saving'
 import SavingStatement from './screens/Saving/SavingStatement'
 import Loan from './screens/Loan/Loan'
 import LoanDetail from './screens/Loan/LoanDetail'
-import MembershipCard from './screens/MembershipCard/MembershipCard'
 import TransactionMenu from './screens/Transaction/TransactionMenu'
 import ServiceList from './screens/OtherServices/ServiceList'
 import PromptPayList from './screens/OtherServices/promptPay/PromptPayList'
@@ -101,7 +100,6 @@ const NotVerifiedStack = () => {
       <Stack.Screen name='SavingStatement' component={SavingStatement} />
       <Stack.Screen name='Loan' component={Loan} />
       <Stack.Screen name='LoanDetail' component={LoanDetail} />
-      <Stack.Screen name='MembershipCard' component={MembershipCard} />
       <Stack.Screen name='TransactionMenu' component={TransactionMenu} />
       <Stack.Screen name='ServiceList' component={ServiceList} />
       <Stack.Screen name='PromptPayList' component={PromptPayList} />
@@ -176,7 +174,6 @@ const VerifiedStack = () => {
       <Stack.Screen name='SavingStatement' component={SavingStatement} />
       <Stack.Screen name='Loan' component={Loan} />
       <Stack.Screen name='LoanDetail' component={LoanDetail} />
-      <Stack.Screen name='MembershipCard' component={MembershipCard} />
       <Stack.Screen name='TransactionMenu' component={TransactionMenu} />
       <Stack.Screen name='ServiceList' component={ServiceList} />
       <Stack.Screen name='PromptPayList' component={PromptPayList} />
@@ -326,7 +323,7 @@ export default function App() {
           }
         })
         .catch(error => {
-          console.log(error)
+          console.log('Error', error)
           if (
             error.message === 'Network Error' ||
             error.message === 'Request failed with status code 404' ||
@@ -381,7 +378,7 @@ export default function App() {
           }
         })
         .catch(error => {
-          console.log(error)
+          console.log('Error', error)
           if (
             error.message === 'Request failed with status code 404' ||
             error.message === 'Request failed with status code 500'
@@ -398,12 +395,16 @@ export default function App() {
 
   if (isLoading) {
     return (
-      <ImageBackground source={require('./assets/Screen.png')} style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}>
+      <View style={{ flex: 1, backgroundColor: '#2ea4fe', justifyContent: 'center' }}>
         <View style={{ alignItems: 'center' }}>
+          <Image
+            style={{ width: '50%', height: undefined, aspectRatio: 1 }}
+            source={require('./assets/Barakah.jpg')}
+          />
 
           {
             APP_VERSION !== null && (
-              <Text style={{ color: '#c39639', marginTop: 480 }}>Version {APP_VERSION}</Text>
+              <Text style={{ color: '#fff', marginTop: 50 }}>Version {APP_VERSION}</Text>
             )
           }
 
@@ -461,7 +462,7 @@ export default function App() {
           }}
           onCancel={() => setShowExitMoal(false)}
         />
-      </ImageBackground>
+      </View>
     )
   } else {
     if (apiKey) {

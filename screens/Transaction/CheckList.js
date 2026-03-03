@@ -21,7 +21,7 @@ const CheckList = ({ route, navigation }) => {
     const [alertType, setAlertType] = useState('normal')
     const [favorites, setFavorites] = useState(null)
     const [API_URL, setAPI_URL] = useState(null)
-    const [isLoading, setIsLoading] = useState(true)
+    const [enableButton, setEnableButton] = useState(false)
 
     const handleBackNavigator = () => {
         if (!previousScreen || Platform.OS === 'ios') {
@@ -57,22 +57,18 @@ const CheckList = ({ route, navigation }) => {
         if (destinationAccount.SHR_) {
             setShowAlert(true)
             axios
-                .post(
-                    `${API_URL}/ShareDEP_IN`,
-                    {
-                        API_KEY: apiKey,
-                        MEM: MEM,
-                        ACCOUNT_NO: ref2,
-                        SHR_BTH: ref3,
-                        CAUSE: memo
-                    },
-                    {
-                        headers: {
-                            APP_KEY: APP_KEY,
-                            Authorization: `Bearer ${token}`,
-                        },
-                    },
-                )
+                .post(`${API_URL}/ShareDEP_IN`, {
+                    API_KEY: apiKey,
+                    MEM: MEM,
+                    ACCOUNT_NO: ref2,
+                    SHR_BTH: ref3,
+                    CAUSE: memo
+                }, {
+                    headers: {
+                        APP_KEY: APP_KEY,
+                        Authorization: `Bearer ${token}`,
+                    }
+                })
                 .then(async response => {
                     // console.log(response.data)
                     if (response.data.code == 10) {
@@ -128,22 +124,18 @@ const CheckList = ({ route, navigation }) => {
             setShowAlert(true)
 
             axios
-                .post(
-                    `${API_URL}/TransferPaymentIN`,
-                    {
-                        API_KEY: apiKey,
-                        ACCOUNT_NO: retSaving,
-                        ACCOUNT_NO_TO: retSavingGoto,
-                        AMOUNT: ref3,
-                        CAUSE: memo
-                    },
-                    {
-                        headers: {
-                            APP_KEY: APP_KEY,
-                            Authorization: `Bearer ${token}`,
-                        },
-                    },
-                )
+                .post(`${API_URL}/TransferPaymentIN`, {
+                    API_KEY: apiKey,
+                    ACCOUNT_NO: retSaving,
+                    ACCOUNT_NO_TO: retSavingGoto,
+                    AMOUNT: ref3,
+                    CAUSE: memo
+                }, {
+                    headers: {
+                        APP_KEY: APP_KEY,
+                        Authorization: `Bearer ${token}`,
+                    }
+                })
                 .then(async response => {
                     // console.log(response.data)
                     if (response.data.code === 10) {
@@ -177,7 +169,7 @@ const CheckList = ({ route, navigation }) => {
                         setAlertMessage('กรุณาตรวจสอบการทำรายการ หากไม่สำเร็จกรุณาลองใหม่อีกครั้ง')
                         setAlertType('Authen')
                     } else {
-                        setAlertMessage(response.data.message)
+                        setAlertMessage(response.data.message ? response.data.message : 'ระบบขัดข้อง โปรดลองใหม่ในภายหลัง')
 
                         if (response.data.code === 90) {
                             setAlertType('Authen')
@@ -202,24 +194,20 @@ const CheckList = ({ route, navigation }) => {
             setShowAlert(true)
 
             axios
-                .post(
-                    `${API_URL}/PayLoanIN`,
-                    {
-                        API_KEY: apiKey,
-                        ACCOUNT_NO: refSaving,
-                        LCONT_ID: ref2,
-                        SUM_SAL: ref3,
-                        CODE: destinationAccount.CODE,
-                        MEM: other,
-                        CAUSE: memo
-                    },
-                    {
-                        headers: {
-                            APP_KEY: APP_KEY,
-                            Authorization: `Bearer ${token}`,
-                        },
-                    },
-                )
+                .post(`${API_URL}/PayLoanIN`, {
+                    API_KEY: apiKey,
+                    ACCOUNT_NO: refSaving,
+                    LCONT_ID: ref2,
+                    SUM_SAL: ref3,
+                    CODE: destinationAccount.CODE,
+                    MEM: other,
+                    CAUSE: memo
+                }, {
+                    headers: {
+                        APP_KEY: APP_KEY,
+                        Authorization: `Bearer ${token}`,
+                    }
+                })
                 .then(async response => {
                     // console.log(response.data)
                     if (response.data.code === 10) {
@@ -293,10 +281,7 @@ const CheckList = ({ route, navigation }) => {
                     }
 
                     setFavorites(favorites)
-                    setIsLoading(false)
                 }
-
-                setIsLoading(false)
             })
             .catch(err => {
                 console.log(err.message)
@@ -314,6 +299,7 @@ const CheckList = ({ route, navigation }) => {
                     setAPI_URL(StoreAPI_URL)
                     setToken(token)
                     setApiKey(apiKey)
+                    setEnableButton(true)
 
                     setTimeout(() => {
                         getFavorites(apiKey, token, StoreAPI_URL)
@@ -369,7 +355,7 @@ const CheckList = ({ route, navigation }) => {
             <View style={styles.body}>
                 <ScrollView>
                     <View style={styles.subSection1}>
-                        <Image style={styles.icon} source={require('../../assets/Ibnuauf-Logo-for-App.png')} />
+                        <Image style={styles.icon} source={require('../../assets/new-logo-barakah3.png')} />
 
                         <View>
                             <Text style={styles.primaryText}>{sourceAccount.ACCOUNT_NAME}</Text>
@@ -383,7 +369,7 @@ const CheckList = ({ route, navigation }) => {
                     </View>
 
                     <View style={styles.subSection1}>
-                        <Image style={styles.icon} source={require('../../assets/Ibnuauf-Logo-for-App.png')} />
+                        <Image style={styles.icon} source={require('../../assets/new-logo-barakah3.png')} />
 
                         <View>
                             <Text style={styles.primaryText}>
@@ -438,7 +424,7 @@ const CheckList = ({ route, navigation }) => {
                     <Text style={styles.warnningText}>กรุณาตรวจสอบข้อมูลบัญชีปลายทาง หากกด 'ยืนยัน' แล้วจะไม่สามารถยกเลิกรายการได้</Text>
                 </View>
 
-                <TouchableOpacity onPress={() => !isLoading && onSubmit()} style={styles.button} >
+                <TouchableOpacity onPress={() => enableButton && onSubmit()} style={styles.button} >
                     <Text style={styles.btnText}>ยืนยัน</Text>
                 </TouchableOpacity>
             </View>

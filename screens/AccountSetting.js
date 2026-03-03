@@ -160,7 +160,7 @@ const AccountSetting = ({ navigation }) => {
                         </View>
                     ) : (
                         <View style={styles.itemBox}>
-                            <FontAwesome name='circle' size={20} color='#1890ff' />
+                            <FontAwesome name='circle' size={20} color={PRIMARY_COLOR} />
                             <View style={{ marginLeft: 20 }}>
                                 <Text style={styles.textActive} numberOfLines={1}>{mainAccount.ACCOUNT_NAME}</Text>
                                 <Text style={styles.secondaryTextActive}>{accountNumberFormat(mainAccount.ACCOUNT_NO)}</Text>

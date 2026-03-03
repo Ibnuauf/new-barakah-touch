@@ -32,7 +32,7 @@ import { addScreenshotListener } from 'react-native-detector'
 const { width: windowWidth } = Dimensions.get('window')
 
 const SharePayment = ({ route, navigation }) => {
-  const { favoriteNumber, qrAccount, qrAmount, previousScreen, favAmount } = route.params
+  const { favoriteNumber, qrAccount, qrAmount, mainAccount, previousScreen, favAmount } = route.params
 
   const [{ SAVING_LIST }, dispatch] = useReducer(savingListReducer, initialSavingListState)
 
@@ -162,9 +162,9 @@ const SharePayment = ({ route, navigation }) => {
     }
 
     if (NumberType === '03') {
-      if (amount % 5000 !== 0) {
+      if (amount % 100 !== 0) {
         setShowAlert(true)
-        setAlertMessage('กรุณาระบุจำนวนเงินครั้งละ 5000 บาท')
+        setAlertMessage('กรุณาระบุจำนวนเงินครั้งละ 100 บาท')
         return
       }
     }
@@ -350,10 +350,21 @@ const SharePayment = ({ route, navigation }) => {
                   accounts => accounts.ACC_TYPE === '02' || accounts.ACC_TYPE === '03' || accounts.ACC_TYPE === '05',
                 )
 
-                setSourceAccount(wadiah[0])
-                setSourceAccountList(wadiah)
+                if (!mainAccount) {
+                  dispatch({ type: 'SET_SAVING_LIST', SAVING_LIST: wadiah })
+                  setSourceAccount(wadiah[0])
+                  setSourceAccountList(wadiah)
+                } else {
+                  let newSavings = []
+                  const main = (response.data.item.Saving).find(account => account.ACCOUNT_NO === mainAccount.ACCOUNT_NO)
 
-                dispatch({ type: 'SET_SAVING_LIST', SAVING_LIST: wadiah })
+                  newSavings.push(main)
+
+                  dispatch({ type: 'SET_SAVING_LIST', SAVING_LIST: newSavings })
+
+                  setSourceAccount(main)
+                  setSourceAccountList(newSavings)
+                }
 
                 if (favoriteNumber !== undefined || qrAccount !== undefined) {
                   setAccountType('otherAccount')

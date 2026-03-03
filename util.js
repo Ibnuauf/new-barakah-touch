@@ -49,7 +49,7 @@ export const accountNumberFormat = (string) => {
 
 // format การแยกประเภทบัญชี เช่น '01' คือบัญชีหุ้น, '02' คือบัญชีวาดีอะฮ์
 export const getAccountType = (string) => {
-    if (string.length === 13) {
+    if (string.length === 13 && !string.includes('/')) {
         return 'bk'
     } else if (string.length === 10) {
         if (string.slice(0, 2) !== '00' && string.slice(0, 2) !== '01') {
@@ -83,9 +83,7 @@ export const getFavoriteAccounts = (array) => {
 
 export const getFavoriteLoans = (array) => {
     const favoriteLoans = array.filter(item => {
-        const type = getAccountType(item.ACC_TYPE)
-
-        if (type !== '01' && type !== '02' && type !== '03' && type !== '04' && type !== '05' && type !== '06' && type !== 'bk') {
+        if (item.ACC_TYPE.includes('/')) {
             return item
         }
     })

@@ -211,7 +211,7 @@ export default function QrCodeGenerate({ route, navigation }) {
               <View style={styles.iconBox}>
                 <Image
                   style={{ width: 1500 / 28, height: 1500 / 28 }}
-                  source={require('../../../assets/Ibnuauf-Logo-for-App.png')}
+                  source={require('../../../assets/new-logo-barakah3.png')}
                 />
               </View>
 

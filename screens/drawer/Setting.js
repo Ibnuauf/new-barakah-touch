@@ -5,7 +5,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { launchImageLibrary } from 'react-native-image-picker'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import ConfirmModal from '../../components/ConfirmModal'
+import AppAlert from '../../components/AppAlert'
 import { addScreenshotListener } from 'react-native-detector'
 import { PRIMARY_COLOR } from '../../environment'
 
@@ -169,11 +169,11 @@ const Setting = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
 
-            <ConfirmModal
-                modalVisible={modalVisible}
+            <AppAlert
+                visible={modalVisible}
                 title='ลบบัญชีผู้ใช้'
-                content='การลบบัญชีผู้ใช้ ข้อมูลของคุณจะถูกลบทั้งหมด คุณต้องการยืนยันการลบบัญชีผู้ใช้หรือไม่'
-                color='#ff4d4f'
+                message='การลบบัญชีผู้ใช้ ข้อมูลของคุณจะถูกลบทั้งหมด คุณต้องการยืนยันการลบบัญชีผู้ใช้หรือไม่'
+                showCancel={true}
                 onConfirm={onConfirm}
                 onCancel={() => setModalVisible(false)}
             />

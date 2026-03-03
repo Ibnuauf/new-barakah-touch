@@ -9,7 +9,7 @@ export default function LoginLayout(props) {
                 <TouchableWithoutFeedback onPress={props.onPress}>
                     <View style={styles.container}>
                         <Image
-                            style={{ width: '60%', height: 110 }}
+                            style={{ width: '45%', height: 120 }}
                             source={require('../../assets/index.png')}
                         />
                         {props.children}

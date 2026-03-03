@@ -43,13 +43,13 @@ export const loginStyles = ScaledSheet.create({
     },
     forgot: {
         fontFamily: 'Sarabun-Regular',
-        color: 'white',
+        color: '#0047AB',
         fontSize: '14@s',
         marginTop: 10,
     },
     registerBtn: {
         fontFamily: 'Sarabun-Regular',
-        color: '#fff',
+        color: '#0047AB',
         fontSize: '14@s',
         paddingVertical: 3
     },
@@ -90,7 +90,7 @@ export const loginStyles = ScaledSheet.create({
     },
     textStyle: {
         fontFamily: 'Sarabun-Light',
-        color: 'white',
+        color: '#fff',
         fontSize: '14@s',
         textAlign: 'center'
     },
