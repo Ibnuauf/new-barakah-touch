@@ -77,13 +77,13 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.ismart.touch"
+    namespace "com.barakah.touch"
     defaultConfig {
-        applicationId "com.ismart.touch"
+        applicationId "com.barakah.touch"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 38
-        versionName "1.7.2"
+        versionCode 24
+        versionName "1.5.2"
     }
     signingConfigs {
         debug {

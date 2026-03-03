@@ -1,4 +1,4 @@
-package com.ismart.touch
+package com.barakah.touch
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

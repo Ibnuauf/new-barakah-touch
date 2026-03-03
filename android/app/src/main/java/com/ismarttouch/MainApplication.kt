@@ -1,4 +1,4 @@
-package com.ismart.touch
+package com.barakah.touch
 
 import android.app.Application
 import com.facebook.react.PackageList
