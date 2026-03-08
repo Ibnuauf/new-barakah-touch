@@ -1,12 +1,11 @@
 import React from 'react'
-import { View, ImageBackground, Image, StyleSheet, TouchableWithoutFeedback } from 'react-native'
-// import { NativeBaseProvider } from 'native-base'
+import { View, ImageBackground, Image, StyleSheet, TouchableWithoutFeedback, SafeAreaView } from 'react-native'
 
 export default function LoginLayout(props) {
     return (
-        // <NativeBaseProvider>
-            <ImageBackground source={require('../../assets/blue-wallpapers.jpg')} style={styles.image} blurRadius={10}>
-                <TouchableWithoutFeedback onPress={props.onPress}>
+        <ImageBackground source={require('../../assets/blue-wallpapers.jpg')} style={styles.image} blurRadius={10}>
+            <TouchableWithoutFeedback onPress={props.onPress}>
+                <SafeAreaView>
                     <View style={styles.container}>
                         <Image
                             style={{ width: '45%', height: 120 }}
@@ -14,15 +13,15 @@ export default function LoginLayout(props) {
                         />
                         {props.children}
                     </View>
-                </TouchableWithoutFeedback>
-            </ImageBackground>
-        // </NativeBaseProvider>
+                </SafeAreaView>
+            </TouchableWithoutFeedback>
+        </ImageBackground>
     )
 }
 
 export const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        height: '100%',
         alignItems: 'center',
         justifyContent: 'center'
     },

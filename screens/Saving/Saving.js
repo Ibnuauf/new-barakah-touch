@@ -269,7 +269,7 @@ export default function Saving({ route, navigation }) {
                                 onPress={() => setShowBalance(!showBalance)}
                             >
                                 <Text style={[styles.statementText, { color: '#1890ff' }]}>แสดงยอดเงินรวม</Text>
-                                <FontAwesome5 name='chevron-right' size={16} color='#1890ff' style={{ marginLeft: 4 }} />
+                                <FontAwesome5 name='chevron-right' size={14} color='#1890ff' style={{ marginLeft: 4 }} />
                             </TouchableOpacity>
                         )
                     }

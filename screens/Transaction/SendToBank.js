@@ -53,7 +53,7 @@ const SendToBank = ({ route, navigation }) => {
     const [destinationBank, setDestinationBank] = useState(null)
     const [bankCode, setBankCode] = useState(null)
     const [fee, setFee] = useState(0)
-    const [limit, setLimit] = useState(50000)
+    const [limit, setLimit] = useState(20000)
     const [isLoading, setIsLoading] = useState(true)
     const [history, setHistory] = useState([])
     const [favNumber, setFavNumber] = useState(null)
@@ -74,82 +74,71 @@ const SendToBank = ({ route, navigation }) => {
             finalAmount = amount
         }
 
-        // setShowAlert(true)
+        setShowAlert(true)
 
-        navigation.navigate('CheckListBankOtp', {
-            PromptPayAccountNo: '1111111111',
-            PromptPayAccountName: 'ทดสอบ2 ทดสอบ2',
-            ToBankId: '014',
-            SenderName: 'ทดสอบ1 ทดสอบ1',
-            SenderReference: '00000000000',
-            Amount: 100,
-            memo,
-            mgate_prev_inquiry_request: { message: 'test' }
-        })
+        axios
+            .post(`${API_URL}/CIMB_Inquire`, {
+                PoxyId: accountType === 'bank' ? bankAccountNumber : promptpayNumber,
+                ToBankId: accountType === 'bank' ? bankCode : null,
+                Amount: finalAmount,
+                ACCOUNT_NO: sourceAccount.ACCOUNT_NO,
+                FEE: fee
+            }, {
+                headers: {
+                    APP_KEY: APP_KEY,
+                    Authorization: `Bearer ${token}`,
+                }
+            })
+            .then(async response => {
+                // console.log(response.data)
+                if (response.data.code === 10) {
+                    setShowAlert(false)
 
-        // axios
-        //     .post(`${API_URL}/CIMB_Inquire`, {
-        //         PoxyId: accountType === 'bank' ? bankAccountNumber : promptpayNumber,
-        //         ToBankId: accountType === 'bank' ? bankCode : null,
-        //         Amount: finalAmount,
-        //         ACCOUNT_NO: sourceAccount.ACCOUNT_NO,
-        //         FEE: fee
-        //     }, {
-        //         headers: {
-        //             APP_KEY: APP_KEY,
-        //             Authorization: `Bearer ${token}`,
-        //         }
-        //     })
-        //     .then(async response => {
-        //         // console.log(response.data)
-        //         if (response.data.code === 10) {
-        //             setShowAlert(false)
+                    try {
+                        await AsyncStorage.setItem('token', response.data.itemdetail)
+                    } catch (error) {
+                        console.log(error)
+                    }
 
-        //             try {
-        //                 await AsyncStorage.setItem('token', response.data.itemdetail)
-        //             } catch (error) {
-        //                 console.log(error)
-        //             }
+                    const { PromptPayAccountName, ToBankID } = await response.data.item
+                    const { SenderName, SenderReference, Amount, ProxyID } = await response.data.item.mgate_prev_inquiry_request
 
-        //             const { PromptPayAccountName, ToBankID } = await response.data.item
-        //             const { SenderName, SenderReference, Amount, ProxyID } = await response.data.item.mgate_prev_inquiry_request
+                    // string to integer ("1000000"(string) -> 1000000(integer) -> 10000.00(integer))
+                    const amountInt = +Amount / 100
 
-        //             // string to integer ("1000000"(string) -> 1000000(integer) -> 10000.00(integer))
-        //             const amountInt = +Amount / 100
+                    navigation.navigate('CheckListBankOtp', {
+                        PromptPayAccountNo: ProxyID,
+                        PromptPayAccountName,
+                        ToBankId: accountType === 'bank' ? ToBankID : null,
+                        SenderName,
+                        SenderReference,
+                        Amount: amountInt,
+                        memo,
+                        mgate_prev_inquiry_request: response.data.item.mgate_prev_inquiry_request
+                    })
+                } else {
+                    setShowAlert(true)
+                    setAlertMessage(response.data.message)
 
-        //             navigation.navigate('CheckListBankOtp', {
-        //                 PromptPayAccountNo: ProxyID,
-        //                 PromptPayAccountName,
-        //                 ToBankId: accountType === 'bank' ? ToBankID : null,
-        //                 SenderName,
-        //                 SenderReference,
-        //                 Amount: amountInt,
-        //                 memo,
-        //                 mgate_prev_inquiry_request: response.data.item.mgate_prev_inquiry_request
-        //             })
-        //         } else {
-        //             setShowAlert(true)
-        //             setAlertMessage(response.data.message)
-
-        //             try {
-        //                 await AsyncStorage.setItem('token', response.data.itemdetail)
-        //             } catch (error) {
-        //                 console.log(error)
-        //             }
-        //         }
-        //     })
-        //     .catch(err => {
-        //         console.log({ err })
-        //         if (err.message === 'Network Error') {
-        //             setShowAlert(true)
-        //             setAlertType('Authen')
-        //             setAlertMessage('ไม่สามารถทำรายการได้ กรุณาลองใหม่อีกครั้ง')
-        //         } else if (err.message === 'Request failed with status code 401') {
-        //             setShowAlert(true)
-        //             setAlertType('Authen')
-        //             setAlertMessage('คุณไม่ได้ทำรายการในเวลาที่กำหนด กรุณา Login อีกครั้ง')
-        //         }
-        //     })
+                    try {
+                        await AsyncStorage.setItem('token', response.data.itemdetail)
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+            })
+            .catch(err => {
+                console.log({ err })
+                if (err.message === 'Network Error') {
+                    setShowAlert(true)
+                    setAlertType('Authen')
+                    setAlertMessage('ไม่สามารถทำรายการได้ กรุณาลองใหม่อีกครั้ง')
+                } else if (err.message === 'Request failed with status code 401') {
+                    setShowAlert(true)
+                    setAlertType('Authen')
+                    setAlertMessage('คุณไม่ได้ทำรายการในเวลาที่กำหนด กรุณา Login อีกครั้ง')
+                }
+            })
     }
 
     const showHistory = (StoreAPI_URL, apiKey, ACCOUNT_NO, itemdetail) => {

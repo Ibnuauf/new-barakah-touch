@@ -65,7 +65,7 @@ export const styles = ScaledSheet.create({
     },
     closeIcon: {
         position: 'absolute',
-        top: 40,
+        top: 10,
         right: 20,
         backgroundColor: 'rgba(0,0,0,0.03)',
         width: 50,

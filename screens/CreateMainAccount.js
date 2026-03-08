@@ -173,7 +173,7 @@ const CreateMainAccount = ({ navigation, route }) => {
 
             <View style={styles.header}>
                 <SafeAreaView style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <TouchableOpacity style={{ paddingRight: 16 }} onPress={handleBackNavigator}>
+                    <TouchableOpacity style={{ paddingRight: 16, paddingLeft: 6 }} onPress={handleBackNavigator}>
                         <FontAwesome5 name='chevron-left' size={18} color='#fff' />
                     </TouchableOpacity>
                     <View>
@@ -261,6 +261,7 @@ const CreateMainAccount = ({ navigation, route }) => {
                 title={alertMessage === '' ? alertMessage : alertType === 'success' ? 'สำเร็จ' : ' ไม่สำเร็จ'}
                 message={alertMessage === '' ? 'Loading...' : alertMessage}
                 showConfirm={alertMessage !== ''}
+                confirmButtonColor={alertType === 'success' ? '#5cb85c' : '#DD6B55'}
                 showCancel={false}
                 onConfirm={onConfirmPressed}
                 onCancel={() => setShowAlert(false)}

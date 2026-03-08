@@ -113,9 +113,9 @@ export default function Statement({ saving, statements }) {
                             <View style={statementStyles.iconBox}>
                                 {
                                     id === i ? (
-                                        <FontAwesome5 name='chevron-up' style={{ marginRight: 6 }} size={16} color='#ccc' />
+                                        <FontAwesome5 name='chevron-up' style={{ marginRight: 6 }} size={14} color='#ccc' />
                                     ) : (
-                                        <FontAwesome5 name='chevron-down' style={{ marginRight: 6 }} size={16} color='#ccc' />
+                                        <FontAwesome5 name='chevron-down' style={{ marginRight: 6 }} size={14} color='#ccc' />
                                     )
                                 }
                             </View>

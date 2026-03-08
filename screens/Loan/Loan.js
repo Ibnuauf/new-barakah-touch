@@ -184,7 +184,7 @@ export default function Loan({ route, navigation }) {
                                 onPress={() => setShowBalance(!showBalance)}
                             >
                                 <Text style={[styles.statementText, { color: '#ff7875' }]}>แสดงยอดหนี้รวม</Text>
-                                <FontAwesome5 name='chevron-right' size={16} color='#ff7875' style={{ marginLeft: 4 }} />
+                                <FontAwesome5 name='chevron-right' size={14} color='#ff7875' style={{ marginLeft: 4 }} />
                             </TouchableOpacity>
                         )
                     }
@@ -218,7 +218,7 @@ export default function Loan({ route, navigation }) {
                                                 <Text style={[styles.statementText, { color: '#ff7875' }]} numberOfLines={1}>{data.LCONT_AMOUNT_SAL} บาท</Text>
                                                 <Text style={styles.secondaryText} numberOfLines={1}>ยอดหนี้คงเหลือ</Text>
                                             </View>
-                                            <FontAwesome5 name='chevron-right' size={16} color='#ccc' />
+                                            <FontAwesome5 name='chevron-right' size={14} color='#ccc' />
                                         </View>
                                     </TouchableOpacity>
                                 ))
@@ -312,7 +312,7 @@ const styles = ScaledSheet.create({
     amountDetailBox: {
         flex: 1,
         alignItems: 'flex-end',
-        paddingRight: '2@msr'
+        marginRight: 4
     },
     emptyText: {
         fontFamily: 'Sarabun-Light',

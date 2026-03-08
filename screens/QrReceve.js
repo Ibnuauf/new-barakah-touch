@@ -6,7 +6,6 @@ import {
     StatusBar,
     BackHandler,
     TextInput,
-    Image,
     ImageBackground,
     Platform,
     PermissionsAndroid,
@@ -17,13 +16,7 @@ import { ScaledSheet } from 'react-native-size-matters'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import QRCode from 'react-native-qrcode-svg'
-import {
-    accountNumberFormat,
-    getAmount,
-    isInteger,
-    prettyAmount,
-    removeDash
-} from '../util'
+import { accountNumberFormat, getAmount, isInteger, prettyAmount, removeDash } from '../util'
 import ActionSheet from '../components/ActionSheet'
 import { Toast, ToastProvider } from '../components/Toast'
 import { CameraRoll } from '@react-native-camera-roll/camera-roll'
@@ -36,7 +29,7 @@ import { APP_KEY, APP_NAME, PRIMARY_COLOR } from '../environment'
 import { addScreenshotListener } from 'react-native-detector'
 import DeviceInfo from 'react-native-device-info'
 
-const QrCard = ({ name, accountNumber, amount }) => {
+const QrCard = ({ name, accountNumber, amount, qrSize, marginTop }) => {
     const [shareNumber, setShareNumber] = useState(null)
     const [bankCode, setBankCode] = useState(null)
 
@@ -74,7 +67,7 @@ const QrCard = ({ name, accountNumber, amount }) => {
     }, [])
 
     return (
-        <View style={styles.rowContainer}>
+        <View style={[styles.rowContainer, { marginTop: marginTop }]}>
             <View style={styles.qrContainer}>
                 <View style={{ alignItems: 'center', marginBottom: 14 }}>
                     <Text style={[styles.primaryText, { color: '#333' }]}>{accountNumberFormat(accountNumber)}</Text>
@@ -83,7 +76,7 @@ const QrCard = ({ name, accountNumber, amount }) => {
 
                 <QRCode
                     value={`${bankCode}\n${shareNumber}\n${accountNumber}\n${amount * 100}`}
-                    size={170}
+                    size={qrSize}
                 />
 
                 <View style={{ alignItems: 'center', width: '100%' }}>
@@ -179,7 +172,6 @@ const QrReceve = ({ navigation }) => {
             }
 
             const uri = await capture()
-
             const image = CameraRoll.save(uri, { type: 'photo', album: 'Barakah' })
 
             if (image) {
@@ -291,10 +283,7 @@ const QrReceve = ({ navigation }) => {
             return true
         }
 
-        const backHandler = BackHandler.addEventListener(
-            'hardwareBackPress',
-            backAction
-        )
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction)
 
         return () => backHandler.remove()
     })
@@ -324,7 +313,7 @@ const QrReceve = ({ navigation }) => {
                                 <AntDesign name='close' size={30} color='#fafafa' />
                             </TouchableOpacity>
 
-                            <Text style={[styles.primaryText]}>QR รับเงิน</Text>
+                            <Text style={styles.primaryText}>QR รับเงิน</Text>
 
                             <TouchableOpacity onPress={handleBackNavigator}>
                                 <AntDesign name='close' size={30} color={PRIMARY_COLOR} />
@@ -335,6 +324,8 @@ const QrReceve = ({ navigation }) => {
                             name={mainAccount.ACCOUNT_NAME}
                             accountNumber={mainAccount.ACCOUNT_NO}
                             amount={amount}
+                            qrSize={170}
+                            marginTop={0}
                         />
                     </View>
 
@@ -356,14 +347,14 @@ const QrReceve = ({ navigation }) => {
 
                         <View style={styles.menuContainer}>
                             <TouchableOpacity style={styles.menuItem} onPress={downloadImage} >
-                                <View style={styles.menuIcon}>
+                                <View style={[styles.menuIcon, { backgroundColor: PRIMARY_COLOR }]}>
                                     <MaterialCommunityIcons name='download' size={26} color='#fff' />
                                 </View>
                                 <Text style={styles.menuText}>บันทึก</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.menuItem} onPress={ShareImage} >
-                                <View style={styles.menuIcon}>
+                                <View style={[styles.menuIcon, { backgroundColor: PRIMARY_COLOR }]}>
                                     <MaterialCommunityIcons name='share-variant' size={26} color='#fff' />
                                 </View>
                                 <Text style={styles.menuText}>แชร์</Text>
@@ -400,22 +391,27 @@ const QrReceve = ({ navigation }) => {
                 </View >
 
                 <ImageBackground ref={viewRef} source={require('../assets/qr-background2.png')} style={styles.imageBackground}>
-                    <Image
-                        style={styles.logoImage}
-                        source={require('../assets/logo-slip.png')}
-                        resizeMode='contain'
-                    />
-
                     <QrCard
                         name={mainAccount.ACCOUNT_NAME}
                         accountNumber={mainAccount.ACCOUNT_NO}
                         amount={amount}
+                        qrSize={160}
+                        marginTop={100}
                     />
 
-                    <View style={[styles.amountContainer, { marginBottom: 20 }]}>
-                        <Text style={[styles.text, styles.secondaryText]}>จำนวนเงิน</Text>
-                        <Text style={styles.text}><Text style={styles.amountTextBold}>{prettyAmount(amount)}</Text> บาท</Text>
-                    </View>
+                    {
+                        amount > 0 ? (
+                            <View style={[styles.amountContainer, { marginBottom: 60 }]}>
+                                <Text style={[styles.text, styles.secondaryText]}>จำนวนเงิน</Text>
+                                <Text style={styles.text}><Text style={styles.amountTextBold}>{prettyAmount(amount)}</Text> บาท</Text>
+                            </View>
+                        ) : (
+                            <View style={[styles.amountContainer, { marginBottom: 60 }]}>
+                                <Text style={[styles.text, styles.secondaryText]}> </Text>
+                                <Text style={styles.text}> </Text>
+                            </View>
+                        )
+                    }
                 </ImageBackground>
             </ToastProvider >
         )
@@ -436,7 +432,7 @@ const styles = ScaledSheet.create({
     },
     rowContainer: {
         alignItems: 'center',
-        marginBottom: '14@vs',
+        marginBottom: '14@vs'
     },
     primaryText: {
         fontFamily: 'Sarabun-Medium',
@@ -450,7 +446,7 @@ const styles = ScaledSheet.create({
     },
     qrContainer: {
         backgroundColor: '#fff',
-        padding: '30@s',
+        padding: '20@s',
         borderRadius: '14@s',
         alignItems: 'center',
         shadowColor: '#333',
@@ -461,7 +457,7 @@ const styles = ScaledSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 3,
         elevation: 3,
-        width: '85%'
+        width: '84%'
     },
     text: {
         fontFamily: 'Sarabun-Regular',
@@ -485,7 +481,6 @@ const styles = ScaledSheet.create({
         width: '45@s',
         height: '45@s',
         borderRadius: '24.5@s',
-        backgroundColor: PRIMARY_COLOR,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -513,8 +508,8 @@ const styles = ScaledSheet.create({
     },
     actionsheetButton: {
         width: '100%',
-        backgroundColor: '#40a9ff',
-        borderColor: '#40a9ff',
+        backgroundColor: PRIMARY_COLOR,
+        borderColor: PRIMARY_COLOR,
         marginVertical: 0,
         marginTop: '6@vs'
     },
@@ -531,7 +526,6 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: '12@s',
-        marginTop: '8@vs',
         alignItems: 'center',
     },
     amountTextBold: {
@@ -564,15 +558,7 @@ const styles = ScaledSheet.create({
     imageBackground: {
         zIndex: -1,
         position: 'absolute',
-        width: '100%'
-    },
-    logoImage: {
-        width: '60%',
-        height: undefined,
-        aspectRatio: 1,
-        alignSelf: 'center',
-        overflow: 'hidden',
-        marginVertical: -60,
+        width: '100%',
     },
     toastContainer: {
         backgroundColor: '#52c41a',

@@ -331,13 +331,13 @@ const styles = ScaledSheet.create({
         marginBottom: '10@s',
     },
     cardText: {
-        fontFamily: 'Sarabun-Regular',
+        fontFamily: 'Sarabun-Medium',
         fontSize: '14@s',
         color: '#fff',
         paddingVertical: '1.5@vs',
     },
     cardBoldText: {
-        fontFamily: 'Sarabun-Medium',
+        fontFamily: 'Sarabun-Bold',
         fontSize: '14@s',
         color: '#fff',
         paddingVertical: '1@vs',

@@ -257,6 +257,7 @@ export default function ChangePin({ navigation }) {
                 title={alertMessage === '' ? alertMessage : alertType === 'success' ? 'สำเร็จ' : ' ไม่สำเร็จ'}
                 message={alertMessage === '' ? 'Loading...' : alertMessage}
                 showConfirm={alertMessage !== ''}
+                confirmButtonColor={alertType === 'success' ? '#5cb85c' : '#DD6B55'}
                 showCancel={false}
                 onConfirm={onConfirmPressed}
                 onCancel={() => setShowAlert(false)}

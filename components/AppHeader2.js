@@ -17,7 +17,7 @@ const AppHeader2 = ({ onPress }) => {
         <View style={styles.header}>
             <StatusBar barStyle='light-content' />
             <SafeAreaView style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <TouchableOpacity style={{ paddingRight: 16 }} onPress={onPress ? onPress : handleBackNavigator}>
+                <TouchableOpacity style={{ paddingRight: 16, paddingLeft: 6 }} onPress={onPress ? onPress : handleBackNavigator}>
                     <FontAwesome5 name='chevron-left' size={18} color='#fff' />
                 </TouchableOpacity>
                 <View>

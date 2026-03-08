@@ -193,9 +193,9 @@ export default function ShareAccount({ route, navigation }) {
                                     <View style={statementStyles.iconBox}>
                                         {
                                             id === i ? (
-                                                <FontAwesome5 name='chevron-up' style={{ marginRight: 6 }} size={16} color='#ccc' />
+                                                <FontAwesome5 name='chevron-up' style={{ marginRight: 6 }} size={14} color='#ccc' />
                                             ) : (
-                                                <FontAwesome5 name='chevron-down' style={{ marginRight: 6 }} size={16} color='#ccc' />
+                                                <FontAwesome5 name='chevron-down' style={{ marginRight: 6 }} size={14} color='#ccc' />
                                             )
                                         }
                                     </View>
@@ -279,13 +279,13 @@ const styles = ScaledSheet.create({
         marginBottom: '8@s'
     },
     cardText: {
-        fontFamily: 'Sarabun-Regular',
+        fontFamily: 'Sarabun-SemiBold',
         fontSize: '14@s',
         color: '#fff',
         paddingVertical: '1.5@vs',
     },
     cardBoldText: {
-        fontFamily: 'Sarabun-Medium',
+        fontFamily: 'Sarabun-Bold',
         fontSize: '18@s',
         color: '#fff',
         paddingVertical: '2@vs'

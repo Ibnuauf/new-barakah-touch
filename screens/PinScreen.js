@@ -56,7 +56,7 @@ export default function PinScreen({ route, navigation }) {
         setAlertMessage('')
 
         if (alertType === 'block') {
-            setAlertType('normal')
+            clearCache()
 
             navigation.reset({
                 index: 0,
@@ -305,8 +305,7 @@ export default function PinScreen({ route, navigation }) {
                                 console.log(err)
                             }
                         } else if (response.data.code === 50 || response.data.code === 40) {
-                            //  กรณีเปลี่ยนเครื่องหรือลาออกแล้ว
-                            clearCache()
+                            //  กรณีเปลี่ยนเครื่อง(code:50) หรือลาออกแล้ว(code:40)
                             setAlertType('block')
                             setAlertMessage(response.data.message)
                             setPin([])

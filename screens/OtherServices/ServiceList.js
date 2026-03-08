@@ -48,7 +48,7 @@ export default function ServiceList({ navigation }) {
     const lineNotify = () => {
         setShowAlert(true)
 
-        if (idCard) {
+        if (idCardNumber) {
             axios
                 .post(`${API_URL}/linetoken`, {
                     MEM_ID: shareNumber,

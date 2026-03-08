@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, ImageBackground, TouchableOpacity, BackHandler, Platform, SafeAreaView } from 'react-native'
 import axios from 'axios'
-import { APP_KEY } from '../../environment'
+import { APP_KEY, LINE_ACCOUNT } from '../../environment'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { otpStyles } from '../../styles/otpStyles'
-import { KeycodeInput } from '../../components/KeycodeInput'
 import { prettyTime } from '../../util'
 import AppAlert from '../../components/AppAlert'
 import moment from 'moment'
@@ -78,94 +77,75 @@ export default function TransferOtp({ route, navigation }) {
     const verifyOTP = (pin) => {
         setShowAlert(true)
 
-        navigation.reset({
-            index: 0,
-            routes: [{
-                name: 'SlipBank',
-                params: {
-                    PromptPayAccountNo,
-                    PromptPayAccountName,
-                    ToBankId,
-                    SenderName,
-                    SenderReference,
-                    Amount,
-                    memo,
-                    fee,
-                    SLIP_NO: 'xxxxxx',
-                    CREATE_DATE: '01/01/2000'
+        axios
+            .post(`${API_URL}/VerifyLineOTP`, {
+                mgate_prev_inquiry_request: mgate_prev_inquiry_request,
+                OTP_PIN: pin,
+                OTP_EXPIRE: currentTime
+            }, {
+                headers: {
+                    APP_KEY: APP_KEY,
+                    Authorization: `Bearer ${token}`
                 }
-            }]
-        })
+            })
+            .then(async response => {
+                // console.log(response.data)
 
-        // axios
-        //     .post(`${API_URL}/VerifyLineOTP`, {
-        //         mgate_prev_inquiry_request: mgate_prev_inquiry_request,
-        //         OTP_PIN: pin,
-        //         OTP_EXPIRE: currentTime
-        //     }, {
-        //         headers: {
-        //             APP_KEY: APP_KEY,
-        //             Authorization: `Bearer ${token}`
-        //         }
-        //     })
-        //     .then(async response => {
-        //         // console.log(response.data)
+                const { code, item, message } = response.data
 
-        //         const { code, item, message } = response.data
-
-        //         if (code === 10) {
-        //             //  สำเร็จ
-        //             navigation.reset({
-        //                 index: 0,
-        //                 routes: [{
-        //                     name: 'SlipBank',
-        //                     params: {
-        //                         PromptPayAccountNo,
-        //                         PromptPayAccountName,
-        //                         ToBankId,
-        //                         SenderName,
-        //                         SenderReference,
-        //                         Amount,
-        //                         memo,
-        //                         fee,
-        //                         SLIP_NO: item.SLIP_NO,
-        //                         CREATE_DATE: item.CREATE_DATE
-        //                     }
-        //                 }]
-        //             })
-        //         } else if (code === 20) {
-        //             //  รหัส otp ผิด
-        //             if (count > 0) {
-        //                 setAlertMessage(`รหัส OTP ไม่ถูกต้อง สามารถกรอกได้อีก ${count} ครั้ง!`)
-        //                 setCount(count - 1)
-        //             } else {
-        //                 clearInterval(interv)
-        //                 setAlertType('block')
-        //                 setAlertMessage('รหัส OTP ไม่ถูกต้องครบ 3 ครั้ง กรุณาทำรายการใหม่')
-        //                 setCount(0)
-        //             }
-        //             setOtp('')
-        //         } else if (code === 30) {
-        //             //  หมดเวลา
-        //             setAlertType('block')
-        //             setAlertMessage(message)
-        //         } else if (code === 0) {
-        //             setAlertTitle('ระบบขัดข้อง')
-        //             setAlertMessage('กรุณาตรวจสอบการทำรายการ หากไม่สำเร็จกรุณาลองใหม่อีกครั้ง')
-        //             setAlertType('authen')
-        //         } else {
-        //             setAlertMessage(message)
-        //         }
-        //     })
-        //     .catch(err => {
-        //         if (err.message === 'Network Error') {
-        //             setAlertType('authen')
-        //             setAlertMessage('กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง')
-        //         } else if (err.message === 'Request failed with status code 401') {
-        //             setAlertType('authen')
-        //             setAlertMessage('คุณไม่ได้ทำรายการในเวลาที่กำหนด กรุณา Login อีกครั้ง')
-        //         }
-        //     })
+                if (code === 10) {
+                    //  สำเร็จ
+                    navigation.reset({
+                        index: 0,
+                        routes: [{
+                            name: 'SlipBank',
+                            params: {
+                                PromptPayAccountNo,
+                                PromptPayAccountName,
+                                ToBankId,
+                                SenderName,
+                                SenderReference,
+                                Amount,
+                                memo,
+                                fee,
+                                SLIP_NO: item.SLIP_NO,
+                                CREATE_DATE: item.CREATE_DATE
+                            }
+                        }]
+                    })
+                } else if (code === 20) {
+                    //  รหัส otp ผิด
+                    if (count > 0) {
+                        setAlertMessage(`รหัส OTP ไม่ถูกต้อง สามารถกรอกได้อีก ${count} ครั้ง!`)
+                        setCount(count - 1)
+                    } else {
+                        clearInterval(interv)
+                        setAlertType('block')
+                        setAlertMessage('รหัส OTP ไม่ถูกต้องครบ 3 ครั้ง กรุณาทำรายการใหม่')
+                        setCount(0)
+                    }
+                    setOtp('')
+                } else if (code === 30) {
+                    //  หมดเวลา
+                    setAlertType('block')
+                    setAlertMessage(message)
+                } else if (code === 0) {
+                    setAlertTitle('ระบบขัดข้อง')
+                    setAlertMessage('กรุณาตรวจสอบการทำรายการ หากไม่สำเร็จกรุณาลองใหม่อีกครั้ง')
+                    setAlertType('authen')
+                } else {
+                    setAlertMessage(message)
+                }
+            })
+            .catch(err => {
+                if (err.message === 'Network Error') {
+                    setAlertType('authen')
+                    setAlertMessage('กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง')
+                } else if (err.message === 'Request failed with status code 401') {
+                    setAlertType('authen')
+                    setAlertMessage('คุณไม่ได้ทำรายการในเวลาที่กำหนด กรุณา Login อีกครั้ง')
+                }
+            })
     }
 
     const newOtp = () => {
@@ -307,7 +287,7 @@ export default function TransferOtp({ route, navigation }) {
             <SafeAreaView style={otpStyles.container}>
                 <View style={otpStyles.title}>
                     <Text style={otpStyles.largeTitle}>ใส่รหัส OTP 6 หลัก</Text>
-                    <Text style={otpStyles.titleText}>OTP ส่งไปยัง Ibnuauf Connect</Text>
+                    <Text style={otpStyles.titleText}>OTP ส่งไปยัง {LINE_ACCOUNT}</Text>
                 </View>
 
                 {/* OTP Input */}
@@ -338,7 +318,7 @@ export default function TransferOtp({ route, navigation }) {
 
                 <AppAlert
                     visible={showAlert}
-                    title={alertMessage === '' ? alertMessage : ' ไม่สำเร็จ'}
+                    title={alertMessage === '' ? alertMessage : alertTitle}
                     message={alertMessage === '' ? 'Loading...' : alertMessage}
                     showConfirm={alertMessage !== ''}
                     showCancel={false}

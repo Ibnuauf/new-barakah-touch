@@ -122,7 +122,7 @@ const AccountSetting = ({ navigation }) => {
 
             <View style={styles.header}>
                 <SafeAreaView style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <TouchableOpacity style={{ paddingRight: 16 }} onPress={handleBackNavigator}>
+                    <TouchableOpacity style={{ paddingRight: 16, paddingLeft: 6 }} onPress={handleBackNavigator}>
                         <FontAwesome5 name='chevron-left' size={18} color='#fff' />
                     </TouchableOpacity>
                     <View>
