@@ -340,15 +340,15 @@ const TransferMoney = ({ route, navigation }) => {
         .then(async (response) => {
           // console.log(response.data.item)
           if (response.data.code === 10) {
-            setDestinationAccountOther(response.data.item)
+            setDestinationAccountOther(response.data.item[0])
 
             if (favoriteNumber !== undefined || qrAccount !== undefined) {
               navigation.navigate('CheckList', {
                 ref1: sourceAccount.ACCOUNT_SHOW,
-                ref2: response.data.item.ACCOUNT_NO,
+                ref2: response.data.item[0].ACCOUNT_NO,
                 ref3: amount,
                 sourceAccount: sourceAccount,
-                destinationAccount: response.data.item,
+                destinationAccount: response.data.item[0],
                 memo: memo,
                 previousScreen: 'TransferMoney'
               })
